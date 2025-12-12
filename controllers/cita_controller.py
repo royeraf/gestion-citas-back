@@ -4,6 +4,8 @@ from models.cita_model import Cita
 from models.paciente_model import Paciente
 from models.horario_medico_model import HorarioMedico
 from models.area_model import Area
+from models.usuario_model import Usuario
+
 from services.pdf_service import PDFService
 from datetime import datetime
 
@@ -370,12 +372,20 @@ class CitaController:
                     'error': 'Área no encontrada'
                 }), 404
             
+            medico_id = request.args.get('medico_id', type=int)
+            
             # Consultar citas confirmadas ordenadas por fecha de registro (orden de llegada)
-            citas = Cita.query.filter(
+            # Usamos JOIN con HorarioMedico para poder filtrar por médico si es necesario
+            query = Cita.query.join(HorarioMedico).filter(
                 Cita.fecha == fecha_obj,
                 Cita.area_id == area_id,
                 Cita.estado == 'confirmada'
-            ).order_by(
+            )
+            
+            if medico_id:
+                query = query.filter(HorarioMedico.medico_id == medico_id)
+            
+            citas = query.order_by(
                 Cita.fecha_registro.asc()  # Ordenar por orden de registro (ascendente)
             ).all()
             
@@ -400,11 +410,15 @@ class CitaController:
                         'turno': cita.horario.turno,
                         'turno_nombre': cita.horario.turno_nombre
                     } if cita.horario else None,
+                    'medico': {
+                        'id': cita.horario.medico.id,
+                        'nombre': cita.horario.medico.nombres_completos
+                    } if cita.horario and cita.horario.medico else None,
                     'fecha_registro': cita.fecha_registro.isoformat() if cita.fecha_registro else None
                 }
                 citas_data.append(cita_info)
             
-            return jsonify({
+            response = {
                 'success': True,
                 'fecha': fecha,
                 'area': {
@@ -413,7 +427,17 @@ class CitaController:
                 },
                 'total': len(citas_data),
                 'citas': citas_data
-            }), 200
+            }
+            
+            if medico_id:
+                medico = Usuario.query.get(medico_id)
+                if medico:
+                    response['medico'] = {
+                        'id': medico.id,
+                        'nombre': medico.nombres_completos
+                    }
+
+            return jsonify(response), 200
             
         except Exception as e:
             return jsonify({
@@ -425,10 +449,12 @@ class CitaController:
     def generar_pdf_citas_confirmadas():
         """
         Genera un PDF con las citas confirmadas para una fecha y área específica.
+        Opcionalmente filtra por médico.
         
         Query params:
         - fecha: Fecha de las citas en formato YYYY-MM-DD (requerido)
         - area_id: ID del área/servicio (requerido)
+        - medico_id: ID del médico (opcional)
         
         Returns:
             PDF file como respuesta directa para descarga
@@ -436,6 +462,7 @@ class CitaController:
         try:
             fecha = request.args.get('fecha')
             area_id = request.args.get('area_id', type=int)
+            medico_id = request.args.get('medico_id', type=int)
             
             # Validar parámetros requeridos
             if not fecha:
@@ -449,8 +476,7 @@ class CitaController:
                     'success': False,
                     'error': 'El parámetro area_id es requerido'
                 }), 400
-            
-            # Validar formato de fecha
+                
             try:
                 fecha_obj = datetime.strptime(fecha, "%Y-%m-%d").date()
             except ValueError:
@@ -458,8 +484,8 @@ class CitaController:
                     'success': False,
                     'error': 'Formato de fecha inválido. Use YYYY-MM-DD'
                 }), 400
-            
-            # Verificar que el área existe
+
+            # Validar existencia del área
             area = Area.query.get(area_id)
             if not area:
                 return jsonify({
@@ -467,57 +493,71 @@ class CitaController:
                     'error': 'Área no encontrada'
                 }), 404
             
-            # Consultar citas confirmadas ordenadas por fecha de registro
-            citas = Cita.query.filter(
-                Cita.fecha == fecha_obj,
-                Cita.area_id == area_id,
+            # Obtener info del médico si se solicita
+            medico = None
+            if medico_id:
+                medico = Usuario.query.get(medico_id)
+                # Validar que el médico exista es opcional aquí, pero útil
+            
+            # Construir consulta
+            query = Cita.query.join(HorarioMedico).filter(
+                HorarioMedico.area_id == area_id,
+                HorarioMedico.fecha == fecha_obj,
                 Cita.estado == 'confirmada'
-            ).order_by(
+            )
+            
+            # Filtrar por médico si se proporciona
+            if medico_id:
+                query = query.filter(HorarioMedico.medico_id == medico_id)
+            
+            # Ordenar por fecha de registro (orden de llegada)
+            citas = query.order_by(
                 Cita.fecha_registro.asc()
             ).all()
             
-            # Construir datos para el PDF
+            # Preparar datos para el servicio PDF
             citas_data = []
             for numero, cita in enumerate(citas, start=1):
                 cita_info = {
-                    'numero': numero,
+                    'numero': numero, 
                     'id': cita.id,
                     'paciente': {
-                        'id': cita.paciente.id,
                         'nombres': cita.paciente.nombres,
                         'apellido_paterno': cita.paciente.apellido_paterno,
                         'apellido_materno': cita.paciente.apellido_materno,
-                        'dni': cita.paciente.dni,
-                        'telefono': cita.paciente.telefono
+                        'dni': cita.paciente.dni
                     } if cita.paciente else None,
                     'horario': {
-                        'id': cita.horario.id,
                         'hora_inicio': str(cita.horario.hora_inicio),
                         'hora_fin': str(cita.horario.hora_fin),
                         'turno': cita.horario.turno,
                         'turno_nombre': cita.horario.turno_nombre
                     } if cita.horario else None,
-                    'fecha_registro': cita.fecha_registro.isoformat() if cita.fecha_registro else None
+                    # Agregar info del médico por cita si no filtramos por médico único
+                    'medico': {
+                        'nombre': cita.horario.medico.nombres_completos
+                    } if cita.horario.medico else None
                 }
                 citas_data.append(cita_info)
             
-            # Datos del área
-            area_data = {
-                'id': area.id,
-                'nombre': area.nombre
-            }
+            area_data = {'id': area.id, 'nombre': area.nombre}
+            medico_data = {'nombre': medico.nombres_completos} if medico else None
             
             # Generar PDF
             pdf_buffer = PDFService.generar_pdf_citas_confirmadas(
                 fecha=fecha,
                 area=area_data,
-                citas=citas_data
+                citas=citas_data,
+                medico=medico_data
             )
             
-            # Generar nombre del archivo
-            filename = PDFService.generar_nombre_archivo(fecha, area.nombre)
+            # Nombre del archivo
+            filename = PDFService.generar_nombre_archivo(
+                fecha, 
+                area.nombre, 
+                medico.nombres_completos if medico else None
+            )
             
-            # Enviar PDF como respuesta
             return send_file(
                 pdf_buffer,
                 mimetype='application/pdf',

@@ -15,7 +15,7 @@ class PDFService:
     """Servicio para generación de documentos PDF."""
     
     @staticmethod
-    def generar_pdf_citas_confirmadas(fecha: str, area: dict, citas: list) -> BytesIO:
+    def generar_pdf_citas_confirmadas(fecha: str, area: dict, citas: list, medico: dict = None) -> BytesIO:
         """
         Genera un PDF con la lista de citas confirmadas para impresión.
         Las citas se separan por turno (Mañana y Tarde).
@@ -24,6 +24,7 @@ class PDFService:
             fecha: Fecha de las citas (YYYY-MM-DD)
             area: Diccionario con id y nombre del área
             citas: Lista de citas con datos del paciente y horario
+            medico: Diccionario con datos del médico (opcional)
             
         Returns:
             BytesIO: Buffer con el contenido del PDF
@@ -71,7 +72,7 @@ class PDFService:
             parent=styles['Normal'],
             fontSize=10,
             alignment=TA_LEFT,
-            spaceAfter=3*mm,
+            spaceAfter=2*mm,
             textColor=colors.HexColor('#4a5568')
         )
         
@@ -112,8 +113,8 @@ class PDFService:
         elements = []
         
         # Título principal
-        elements.append(Paragraph("CENTRO DE SALUD", title_style))
-        elements.append(Paragraph("Lista de Citas Confirmadas", subtitle_style))
+        elements.append(Paragraph("CENTRO DE SALUD LA UNIÓN", title_style))
+        elements.append(Paragraph("Listado de atención", subtitle_style))
         elements.append(Spacer(1, 3*mm))
         
         # Formatear fecha para mostrar
@@ -132,10 +133,24 @@ class PDFService:
         except:
             fecha_formateada = fecha
         
-        # Información del área y fecha
-        elements.append(Paragraph(f"<b>Área:</b> {area.get('nombre', 'No especificada')}", info_style))
-        elements.append(Paragraph(f"<b>Fecha:</b> {fecha_formateada}", info_style))
-        elements.append(Paragraph(f"<b>Total de citas:</b> {len(citas)}", info_style))
+        # Información del área, fecha y médico
+        # Información del área, fecha y médico en una sola línea
+        info_parts = []
+        info_parts.append(f"<b>Área:</b> {area.get('nombre', 'No especificada')}")
+        
+        if medico:
+            info_parts.append(f"<b>Médico:</b> {medico.get('nombre', 'No especificado')}")
+            
+        info_parts.append(f"<b>Fecha:</b> {fecha_formateada}")
+        # info_parts.append(f"<b>Total:</b> {len(citas)}")
+
+        
+        # Unir partes con un separador visual
+        info_text = "  <font color='#cbd5e0'>|</font>  ".join(info_parts)
+        
+        # Centrar la información
+        info_style.alignment = TA_CENTER
+        elements.append(Paragraph(info_text, info_style))
         
         # Separar citas por turno
         citas_manana = []
@@ -153,47 +168,59 @@ class PDFService:
             else:
                 citas_sin_turno.append(cita)
         
+        # Determinar si mostrar columna de médico (si no se filtró por uno específico)
+        mostrar_columna_medico = medico is None
+        
         # Función auxiliar para crear tabla de citas
         def crear_tabla_citas(citas_turno, color_header):
             if not citas_turno:
                 return None
             
             # Encabezados de la tabla
-            table_data = [
-                ['N°', 'DNI', 'Paciente', 'Hora']
-            ]
+            headers = ['N°', 'DNI', 'Paciente', 'Hora']
+            if mostrar_columna_medico:
+                headers.append('Médico Asignado')
+                
+            table_data = [headers]
             
-            # Agregar filas de citas con numeración local por turno
+            # Agregar filas de citas
             for idx, cita in enumerate(citas_turno, start=1):
                 paciente = cita.get('paciente', {}) or {}
                 horario = cita.get('horario', {}) or {}
+                medico_cita = cita.get('medico', {}) or {}
                 
                 # Nombre completo del paciente
                 nombre_completo = f"{paciente.get('apellido_paterno', '')} {paciente.get('apellido_materno', '')}, {paciente.get('nombres', '')}"
                 nombre_completo = nombre_completo.strip().strip(',').strip()
-                if not nombre_completo:
-                    nombre_completo = "No registrado"
                 
-                # Horario formateado
+                # Horario
                 hora_inicio = horario.get('hora_inicio', '')
                 hora_fin = horario.get('hora_fin', '')
                 if hora_inicio and hora_fin:
-                    # Formatear hora (remover segundos si existen)
-                    hora_inicio = hora_inicio[:5] if len(hora_inicio) > 5 else hora_inicio
-                    hora_fin = hora_fin[:5] if len(hora_fin) > 5 else hora_fin
+                    hora_inicio = hora_inicio[:5]
+                    hora_fin = hora_fin[:5]
                     horario_str = f"{hora_inicio} - {hora_fin}"
                 else:
                     horario_str = "-"
                 
-                table_data.append([
-                    str(idx),  # Numeración local por turno
+                row = [
+                    str(idx),
                     paciente.get('dni', 'N/A'),
                     nombre_completo,
                     horario_str
-                ])
+                ]
+                
+                if mostrar_columna_medico:
+                    row.append(medico_cita.get('nombre', 'No asignado'))
+                
+                table_data.append(row)
             
-            # Crear tabla con anchos de columna específicos
-            col_widths = [1.2*cm, 2.5*cm, 10*cm, 3*cm]
+            # Configurar anchos de columna
+            if mostrar_columna_medico:
+                col_widths = [1.2*cm, 2.5*cm, 6*cm, 3*cm, 5*cm]
+            else:
+                col_widths = [1.2*cm, 2.5*cm, 10*cm, 3*cm]
+                
             table = Table(table_data, colWidths=col_widths, repeatRows=1)
             
             # Estilo de la tabla
@@ -207,42 +234,42 @@ class PDFService:
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
                 ('TOPPADDING', (0, 0), (-1, 0), 8),
                 
-                # Cuerpo de la tabla
+                # Cuerpo
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
                 ('FONTSIZE', (0, 1), (-1, -1), 9),
-                ('ALIGN', (0, 1), (0, -1), 'CENTER'),  # Número centrado
-                ('ALIGN', (1, 1), (1, -1), 'CENTER'),  # DNI centrado
-                ('ALIGN', (2, 1), (2, -1), 'LEFT'),    # Nombre a la izquierda
-                ('ALIGN', (3, 1), (3, -1), 'CENTER'),  # Hora centrado
+                ('ALIGN', (0, 1), (0, -1), 'CENTER'),  # N°
+                ('ALIGN', (1, 1), (1, -1), 'CENTER'),  # DNI
+                ('ALIGN', (2, 1), (2, -1), 'LEFT'),    # Paciente
+                ('ALIGN', (3, 1), (3, -1), 'CENTER'),  # Hora
                 ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
                 ('TOPPADDING', (0, 1), (-1, -1), 6),
-                
-                # Bordes
                 ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
                 ('BOX', (0, 0), (-1, -1), 1, color_header),
-                
-                # Colores alternados para filas
-                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f7fafc')]),
+                # ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f7fafc')]),
             ])
+            
+            # Alineación especial para la columna de médico si existe
+            if mostrar_columna_medico:
+                table_style.add('ALIGN', (4, 1), (4, -1), 'LEFT')
             
             table.setStyle(table_style)
             return table
         
-        # Agregar sección de Turno Mañana
+        # Turno Mañana
         if citas_manana:
-            elements.append(Paragraph(f"☀️ TURNO MAÑANA (07:30 - 13:30) — {len(citas_manana)} citas", turno_manana_style))
-            tabla_manana = crear_tabla_citas(citas_manana, colors.HexColor('#d97706'))  # Amber-600
+            elements.append(Paragraph(f"TURNO MAÑANA (07:30 - 13:30) — {len(citas_manana)} citas", turno_manana_style))
+            tabla_manana = crear_tabla_citas(citas_manana, colors.HexColor('#d97706'))
             if tabla_manana:
                 elements.append(tabla_manana)
         
-        # Agregar sección de Turno Tarde
+        # Turno Tarde
         if citas_tarde:
-            elements.append(Paragraph(f"🌙 TURNO TARDE (13:30 - 19:30) — {len(citas_tarde)} citas", turno_tarde_style))
-            tabla_tarde = crear_tabla_citas(citas_tarde, colors.HexColor('#4f46e5'))  # Indigo-600
+            elements.append(Paragraph(f"TURNO TARDE (13:30 - 19:30) — {len(citas_tarde)} citas", turno_tarde_style))
+            tabla_tarde = crear_tabla_citas(citas_tarde, colors.HexColor('#4f46e5'))
             if tabla_tarde:
                 elements.append(tabla_tarde)
         
-        # Si hay citas sin turno definido
+        # Sin Turno
         if citas_sin_turno:
             sin_turno_style = ParagraphStyle(
                 'SinTurnoStyle',
@@ -255,11 +282,11 @@ class PDFService:
                 fontName='Helvetica-Bold'
             )
             elements.append(Paragraph(f"📋 SIN TURNO ASIGNADO — {len(citas_sin_turno)} citas", sin_turno_style))
-            tabla_sin_turno = crear_tabla_citas(citas_sin_turno, colors.HexColor('#6b7280'))  # Gray-500
+            tabla_sin_turno = crear_tabla_citas(citas_sin_turno, colors.HexColor('#6b7280'))
             if tabla_sin_turno:
                 elements.append(tabla_sin_turno)
-        
-        # Si no hay citas en ningún turno
+                
+        # Mensaje vacío
         if not citas_manana and not citas_tarde and not citas_sin_turno:
             no_data_style = ParagraphStyle(
                 'NoDataStyle',
@@ -271,52 +298,29 @@ class PDFService:
             )
             elements.append(Paragraph("No hay citas confirmadas para esta fecha y área.", no_data_style))
         
-        # Espacio antes del pie de página
+        # Espacio final
         elements.append(Spacer(1, 10*mm))
         
-        # Resumen por turnos
-        if citas_manana or citas_tarde:
-            resumen_style = ParagraphStyle(
-                'ResumenStyle',
-                parent=styles['Normal'],
-                fontSize=9,
-                alignment=TA_CENTER,
-                textColor=colors.HexColor('#4a5568'),
-                spaceBefore=5*mm,
-                spaceAfter=5*mm
-            )
-            resumen_text = []
-            if citas_manana:
-                resumen_text.append(f"Mañana: {len(citas_manana)}")
-            if citas_tarde:
-                resumen_text.append(f"Tarde: {len(citas_tarde)}")
-            elements.append(Paragraph(f"<b>Resumen:</b> {' | '.join(resumen_text)} | <b>Total: {len(citas)}</b>", resumen_style))
-        
-        # Pie de página con fecha de generación
+        # Footer
         fecha_generacion = datetime.now().strftime("%d/%m/%Y %H:%M")
         elements.append(Paragraph(f"Documento generado el {fecha_generacion}", footer_style))
-        elements.append(Paragraph("Este documento es válido únicamente para la fecha indicada.", footer_style))
         
-        # Construir PDF
         doc.build(elements)
-        
-        # Regresar el buffer al inicio
         buffer.seek(0)
-        
         return buffer
     
     @staticmethod
-    def generar_nombre_archivo(fecha: str, area_nombre: str) -> str:
+    def generar_nombre_archivo(fecha: str, area_nombre: str, medico_nombre: str = None) -> str:
         """
-        Genera un nombre de archivo descriptivo para el PDF.
-        
-        Args:
-            fecha: Fecha de las citas (YYYY-MM-DD)
-            area_nombre: Nombre del área
-            
-        Returns:
-            str: Nombre del archivo sin extensión
+        Genera un nombre de archivo descriptivo.
+        Si hay médico, lo incluye en el nombre.
         """
-        # Limpiar nombre del área para usar en filename
         area_limpia = area_nombre.lower().replace(' ', '_').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u')
-        return f"citas_confirmadas_{area_limpia}_{fecha}"
+        
+        nombre = f"citas_{area_limpia}_{fecha}"
+        
+        if medico_nombre:
+            medico_limpio = medico_nombre.split()[0].lower() # Primer nombre/apellido
+            nombre += f"_{medico_limpio}"
+            
+        return nombre

@@ -1461,6 +1461,99 @@ http://localhost:5000/api/citas/confirmadas/pdf?fecha=2025-12-11&area_id=1
 
 ---
 
+## 11. ACTUALIZACIÓN: Filtro por Médico
+
+Se ha agregado la opción de filtrar por médico específico, ya que un área puede tener varios doctores.
+
+### 1. Actualizar `citaService.ts`
+
+Agregar `medico_id` opcional a los parámetros:
+
+```typescript
+export interface CitaConfirmadaParams {
+  fecha: string;
+  area_id: number;
+  medico_id?: number | null; // Nuevo campo opcional
+}
+```
+
+### 2. Actualizar componente `ModalImprimirCitas.vue`
+
+Agregar el selector de médicos que se actualiza al cambiar el área.
+
+```vue
+<!-- Agregar debajo del selector de Área -->
+<div v-if="areaId">
+  <label class="block text-sm font-semibold text-gray-700 mb-2">
+    <i class="pi pi-user-md mr-1 text-blue-600"></i>
+    Médico (Opcional)
+  </label>
+  <select 
+    v-model="medicoId" 
+    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+  >
+    <option :value="null">Todos los médicos del área</option>
+    <option v-for="medico in medicosFiltrados" :key="medico.id" :value="medico.id">
+      {{ medico.name }}
+    </option>
+  </select>
+  <p class="text-xs text-gray-500 mt-1 pl-1">
+    Si no selecciona uno, se mostrarán todos los médicos en la tabla.
+  </p>
+</div>
+```
+
+### 3. Lógica del Componente (Script)
+
+```typescript
+import usuarioService from '@/services/usuarioService' // Asegúrate de tener este servicio
+
+// Estado
+const medicoId = ref<number | null>(null)
+const medicos = ref<any[]>([])
+const medicosFiltrados = ref<any[]>([])
+
+// Cargar todos los médicos al montar
+onMounted(async () => {
+    // ... carga inicial ...
+    try {
+        const { data } = await usuarioService.getMedicos()
+        medicos.value = data
+    } catch (e) { console.error(e) }
+})
+
+// Filtrar médicos cuando cambia el área
+watch(areaId, (newId) => {
+    medicoId.value = null // Resetear médico seleccionado
+    if (newId) {
+        // Asumiendo que el objeto médico tiene area_id o lista de areas
+        // Si no tienes esa info en getMedicos(), deberías llamar a un endpoint 
+        // como /api/horarios/medicos-por-area?area_id=X
+        
+        // Opción simple: si tu lista de usuarios tiene el rol y area asignada
+        medicosFiltrados.value = medicos.value.filter(m => m.area_id === newId) 
+    } else {
+        medicosFiltrados.value = []
+    }
+})
+
+// Actualizar llamadas al servicio
+const generarPDF = () => {
+    citaService.descargarPDFCitasConfirmadas({
+        fecha: fecha.value,
+        area_id: areaId.value,
+        medico_id: medicoId.value // Pasar el valor
+    })
+}
+```
+
+### Resultado en el PDF:
+
+1. **Si selecciona médico**: Aparece "Médico: Dr. Juan Pérez" en el encabezado y la tabla es exclusiva de sus citas.
+2. **Si NO selecciona médico**: La tabla incluye una columna extra "Médico Asignado" para saber quién atiende cada cita.
+
+---
+
 ## 9. Resumen de Archivos a Modificar
 
 | Archivo | Acción |
