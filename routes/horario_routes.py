@@ -22,6 +22,9 @@ horario_bp.route('/', methods=['GET'])(token_required(HorarioController.get_hora
 # Eliminar horario individual por ID
 horario_bp.route('/<int:id>', methods=['DELETE'])(token_required(HorarioController.delete_horario))
 
+# Actualizar horario individual por ID (cupos, area_id)
+horario_bp.route('/<int:id>', methods=['PUT'])(token_required(HorarioController.update_horario))
+
 # Obtener horarios de un médico (Legacy/Specific)
 horario_bp.route('/medico/<int:medico_id>', methods=['GET'])(token_required(HorarioController.get_horarios_by_medico))
 

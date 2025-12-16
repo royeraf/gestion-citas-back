@@ -420,6 +420,43 @@ class HorarioController:
             return jsonify({"error": str(e)}), 500
 
     @staticmethod
+    def update_horario(id):
+        """
+        Actualiza un horario específico por ID.
+        Permite modificar cupos y area_id.
+        
+        Body JSON:
+        - cupos: Número de cupos
+        - area_id: ID del área (opcional)
+        """
+        try:
+            horario = HorarioMedico.query.get(id)
+            if not horario:
+                return jsonify({"error": "Horario no encontrado"}), 404
+            
+            data = request.json
+            
+            if 'cupos' in data:
+                cupos = data['cupos']
+                if not isinstance(cupos, int) or cupos < 0:
+                    return jsonify({"error": "Cupos debe ser un número entero positivo"}), 400
+                horario.cupos = cupos
+            
+            if 'area_id' in data:
+                horario.area_id = data['area_id']
+            
+            db.session.commit()
+            
+            return jsonify({
+                "message": "Horario actualizado correctamente",
+                "horario": horario.to_dict()
+            }), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": str(e)}), 500
+
+
+    @staticmethod
     def delete_horarios_mes():
         """
         Elimina todos los horarios de un médico para un mes específico.
