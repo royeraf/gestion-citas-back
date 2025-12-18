@@ -10,6 +10,7 @@ from routes.cita_routes import cita_bp
 from routes.horario_routes import horario_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.medico_routes import medico_bp  # Nuevo import para medicos
+from routes.indicador_routes import indicador_bp  # Import para indicadores de tesis
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from extensions.database import db
 from flask_cors import CORS
@@ -54,6 +55,7 @@ app.register_blueprint(cita_bp, url_prefix="/api/citas")
 app.register_blueprint(horario_bp, url_prefix="/api/horarios")
 app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
 app.register_blueprint(medico_bp, url_prefix="/api/medicos")
+app.register_blueprint(indicador_bp, url_prefix="/api/indicadores")  # Indicadores para tesis
 
 if __name__ == "__main__":
     with app.app_context():
