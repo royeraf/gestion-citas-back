@@ -46,6 +46,8 @@ class CitaController:
             
             # Si el usuario autenticado es un profesional (rol_id = 2),
             # forzar el filtro de doctor_id para que solo vea sus propias citas
+            # y restringir los estados visibles
+            is_profesional = False
             if hasattr(request, 'user') and request.user:
                 user_rol_id = request.user.get('rol_id')
                 user_id = request.user.get('id')
@@ -53,6 +55,7 @@ class CitaController:
                 # Rol 2 = Profesional: solo puede ver sus propias citas
                 if user_rol_id == 2 and user_id:
                     doctor_id = user_id
+                    is_profesional = True
 
             query = Cita.query
 
@@ -86,8 +89,19 @@ class CitaController:
                         Area.nombre.ilike(f"%{area}%")
                     )
                 )
-
-            if estado:
+            # Filtro de estado
+            # Para profesionales: solo pueden ver estados específicos
+            # (confirmada, atendida, no_asistio, referido) - NO ven pendientes ni canceladas
+            if is_profesional:
+                estados_permitidos = ['confirmada', 'atendida', 'no_asistio', 'referido']
+                if estado and estado in estados_permitidos:
+                    # Si el profesional filtra por un estado permitido, aplicar ese filtro
+                    query = query.filter_by(estado=estado)
+                else:
+                    # Si no filtra o filtra por estado no permitido, mostrar todos los permitidos
+                    query = query.filter(Cita.estado.in_(estados_permitidos))
+            elif estado:
+                # Para otros roles, aplicar filtro de estado normalmente
                 query = query.filter_by(estado=estado)
 
             if paciente_dni:
