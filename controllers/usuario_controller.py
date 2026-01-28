@@ -4,6 +4,7 @@ from extensions.database import db
 from models.usuario_model import Usuario
 from models.persona_model import Persona
 from models.horario_medico_model import HorarioMedico
+from models.especialidad_model import Especialidad
 from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
 from flask import make_response
 
@@ -410,6 +411,27 @@ class UsuarioController:
             if 'name' in data:
                 usuario.nombres_completos = data['name']
             
+            # Soporte para nombres divididos
+            if usuario.persona:
+                if 'nombres' in data:
+                    usuario.persona.nombres = data['nombres']
+                if 'apellido_paterno' in data:
+                    usuario.persona.apellido_paterno = data['apellido_paterno']
+                if 'apellido_materno' in data:
+                    usuario.persona.apellido_materno = data['apellido_materno']
+                if 'email' in data:
+                    usuario.persona.email = data['email']
+                if 'telefono' in data:
+                    usuario.persona.telefono = data['telefono']
+                if 'direccion' in data:
+                    usuario.persona.direccion = data['direccion']
+
+            # Gestionar Especialidades (si es médico/profesional)
+            if 'especialidades_ids' in data and usuario.rol_id == 2:
+                ids = data['especialidades_ids']
+                especialidades = Especialidad.query.filter(Especialidad.id.in_(ids)).all()
+                usuario.especialidades = especialidades
+
             identifier = data.get('username') or data.get('dni')
             if identifier and identifier != usuario.dni:
                 # Verificar que el nuevo DNI no esté en uso por otro usuario
@@ -524,17 +546,25 @@ class UsuarioController:
             # 1. Gestionar Persona
             persona = Persona.query.filter_by(dni=dni).first()
             if not persona:
-                # Dividir nombre si es posible (aproximación)
-                parts = data["name"].split(' ')
-                p_nombres = parts[0]
-                p_ap1 = parts[1] if len(parts) > 1 else ""
-                p_ap2 = " ".join(parts[2:]) if len(parts) > 2 else ""
+                p_nombres = data.get("nombres")
+                p_ap1 = data.get("apellido_paterno")
+                p_ap2 = data.get("apellido_materno")
+
+                # Si no vienen divididos, intentar split del 'name'
+                if not p_nombres and "name" in data:
+                    parts = data["name"].split(' ')
+                    p_nombres = parts[0]
+                    p_ap1 = parts[1] if len(parts) > 1 else ""
+                    p_ap2 = " ".join(parts[2:]) if len(parts) > 2 else ""
 
                 persona = Persona(
                     dni=dni,
-                    nombres=p_nombres,
-                    apellido_paterno=p_ap1,
-                    apellido_materno=p_ap2
+                    nombres=p_nombres or "Usuario",
+                    apellido_paterno=p_ap1 or "",
+                    apellido_materno=p_ap2 or "",
+                    email=data.get("email"),
+                    telefono=data.get("telefono"),
+                    direccion=data.get("direccion")
                 )
                 db.session.add(persona)
                 db.session.flush()
@@ -544,10 +574,18 @@ class UsuarioController:
                 persona_id=persona.id,
                 password=generate_password_hash(data["password"]),
                 rol_id=role_mapping.get(data["role"], data["role"]),
-                nombres_completos=data["name"],
                 activo=True
             )
+            
+            # Asignar nombre completo si no se manejó por propiedades individuales
+            if not data.get("nombres") and "name" in data:
+                usuario.nombres_completos = data["name"]
 
+            # 3. Gestionar Especialidades
+            if 'especialidades_ids' in data and usuario.rol_id == 2:
+                ids = data['especialidades_ids']
+                especialidades = Especialidad.query.filter(Especialidad.id.in_(ids)).all()
+                usuario.especialidades = especialidades
 
             db.session.add(usuario)
             db.session.commit()

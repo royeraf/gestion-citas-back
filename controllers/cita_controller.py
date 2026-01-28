@@ -339,8 +339,8 @@ class CitaController:
                 return jsonify({"error": "Cita no encontrada"}), 404
 
             # Guardar estado anterior para el historial
-            estado_anterior = cita.estado_nombre
-            estado_nuevo = data.get("estado")
+            estado_anterior_id = cita.estado_id
+            estado_nuevo_id = None
 
             if "doctor_id" in data:
                 cita.doctor_id = data["doctor_id"]
@@ -352,7 +352,9 @@ class CitaController:
                 # Actualizar relación de estado
                 nuevo_estado_obj = EstadoCita.query.filter_by(nombre=data["estado"]).first()
                 if nuevo_estado_obj:
-                    cita.estado_id = nuevo_estado_obj.id
+                    estado_nuevo_id = nuevo_estado_obj.id
+                    cita.estado_id = estado_nuevo_id
+            
             if "dni_acompanante" in data:
                 dni_ac = data["dni_acompanante"]
                 if dni_ac:
@@ -385,9 +387,9 @@ class CitaController:
                     cita.datos_adicionales.update(data["datos_adicionales"])
                 else:
                     cita.datos_adicionales = data["datos_adicionales"]
-
+            
             # Registrar cambio de estado en el historial si hubo cambio
-            if estado_nuevo and estado_nuevo != estado_anterior:
+            if estado_nuevo_id and estado_nuevo_id != estado_anterior_id:
                 # Obtener el usuario actual del token (guardado por el middleware)
                 usuario_id = None
                 if hasattr(request, 'user') and request.user:
@@ -401,8 +403,8 @@ class CitaController:
                 
                 HistorialEstadoCita.registrar_cambio(
                     cita_id=cita.id,
-                    estado_anterior=estado_anterior,
-                    estado_nuevo=estado_nuevo,
+                    estado_anterior_id=estado_anterior_id,
+                    estado_nuevo_id=estado_nuevo_id,
                     usuario_id=usuario_id,
                     comentario=comentario,
                     ip_address=ip_address
