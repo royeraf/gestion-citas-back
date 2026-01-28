@@ -7,13 +7,21 @@ class Config:
     
     # JWT Config
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', SECRET_KEY)
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=8) # Duración extendida a 8 horas
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=8)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
-    JWT_TOKEN_LOCATION = ['headers', 'cookies'] # Allow both for flexibility
-    JWT_COOKIE_SECURE = False # Set to True in production
-    JWT_REFRESH_COOKIE_NAME = 'refresh_token'
+    
+    # IMPORTANTE: Para usar cookies HttpOnly
+    JWT_TOKEN_LOCATION = ['cookies'] 
+    JWT_COOKIE_SECURE = False  # False para HTTP local
+    JWT_COOKIE_SAMESITE = 'Lax'
     JWT_ACCESS_COOKIE_NAME = 'access_token'
-    JWT_COOKIE_CSRF_PROTECT = False # Disable CSRF for simplicity in this dev stage
+    JWT_REFRESH_COOKIE_NAME = 'refresh_token'
+    JWT_COOKIE_CSRF_PROTECT = False # Desactivar CSRF para simplificar desarrollo
+    JWT_ACCESS_CSRF_COOKIE_NAME = "csrf_access_token"
+    JWT_REFRESH_CSRF_COOKIE_NAME = "csrf_refresh_token"
+    
+    # Configuración de CORS para cookies
+    CORS_SUPPORTS_CREDENTIALS = True
 
     
     # Custom Configs

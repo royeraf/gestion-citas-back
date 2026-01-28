@@ -28,13 +28,14 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 @jwt_required(refresh=True)
 def refresh():
     try:
-        # get_jwt_identity() retrieves the identity stored in the refresh token
         identity = get_jwt_identity()
-        
-        # Create new access token
         new_access = create_access_token(identity=identity)
         
-        return jsonify({"access_token": new_access}), 200
+        response = jsonify({"message": "Token renovado"})
+        from flask_jwt_extended import set_access_cookies
+        set_access_cookies(response, new_access)
+        
+        return response, 200
         
     except Exception as e:
          return jsonify({"error": "Error al renovar token", "details": str(e)}), 401
@@ -58,7 +59,8 @@ def admin_only():
 @usuario_bp.post("/logout")
 def logout():
     response = jsonify({"message": "Sesión cerrada"})
-    response.set_cookie("refresh_token", "", expires=0)
+    from flask_jwt_extended import unset_jwt_cookies
+    unset_jwt_cookies(response)
     return response
 
 

@@ -84,21 +84,15 @@ class UsuarioController:
         access = create_access_token(identity=identity_data)
         refresh = create_refresh_token(identity=identity_data)
 
-        response = make_response({
+        response = make_response(jsonify({
             "message": "Login exitoso",
-            "access_token": access,
             "usuario": usuario.to_dict()
-        })
+        }))
 
-        # Guardar refresh token como cookie HTTP-Only
-        response.set_cookie(
-            "refresh_token",
-            refresh,
-            httponly=True,
-            secure=False,  # Cambiar a True en producción con HTTPS
-            samesite="Lax",
-            max_age=60*60*24*7  # 7 días
-        )
+        # Guardar tokens como cookies HTTP-Only usando funciones de flask_jwt_extended
+        from flask_jwt_extended import set_access_cookies, set_refresh_cookies
+        set_access_cookies(response, access)
+        set_refresh_cookies(response, refresh)
 
         return response
 

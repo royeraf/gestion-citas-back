@@ -45,8 +45,13 @@ def create_app(config_name=None):
         allowed_origins = [url.strip() for url in frontend_url.split(",")]
         
     if app.debug:
-        allowed_origins.extend(["http://localhost:3000", "http://127.0.0.1:3000"])
-        allowed_origins = list(set(allowed_origins))
+        allowed_origins.extend([
+            "http://localhost:3000", 
+            "http://127.0.0.1:3000",
+            "http://localhost:5173",  # Por si usa Vite default
+            "http://127.0.0.1:5173"
+        ])
+        allowed_origins = list(set([o for o in allowed_origins if o]))
         
     CORS(app,
          origins=allowed_origins,
