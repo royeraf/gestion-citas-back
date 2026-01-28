@@ -3,6 +3,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 
+load_dotenv()
+
 from extensions.database import db
 from extensions.jwt_manager import jwt
 from config import config
@@ -17,8 +19,12 @@ from routes.horario_routes import horario_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.medico_routes import medico_bp
 from routes.indicador_routes import indicador_bp
+from routes.catalogo_routes import catalogo_bp
+
+load_dotenv()
 
 def create_app(config_name=None):
+    # Ya no es estrictamente necesario aquí si está arriba, pero no daña
     load_dotenv()
     
     if config_name is None:
@@ -58,6 +64,7 @@ def create_app(config_name=None):
     app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
     app.register_blueprint(medico_bp, url_prefix="/api/medicos")
     app.register_blueprint(indicador_bp, url_prefix="/api/indicadores")
+    app.register_blueprint(catalogo_bp, url_prefix="/api/catalogos")
     
     # Global Health Check
     @app.route('/api/health', methods=['GET'])

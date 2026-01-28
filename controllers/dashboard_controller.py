@@ -3,6 +3,7 @@ from models.paciente_model import Paciente
 from models.cita_model import Cita
 from models.usuario_model import Usuario
 from models.area_model import Area
+from models.estado_cita_model import EstadoCita
 from models.horario_medico_model import HorarioMedico
 from datetime import date
 from sqlalchemy import func
@@ -12,10 +13,13 @@ def get_dashboard_stats():
     
     total_pacientes = Paciente.query.count()
     citas_hoy = Cita.query.filter(Cita.fecha == today).count()
-    citas_pendientes_hoy = Cita.query.filter(Cita.fecha == today, Cita.estado == 'pendiente').count()
+    
+    # Citas pendientes hoy usando relacion
+    citas_pendientes_hoy = Cita.query.join(EstadoCita).filter(Cita.fecha == today, EstadoCita.nombre == 'pendiente').count()
     # Corregido: rol_id es 2 para medicos segun insert_medicos.py y usuario_controller.py
     medicos_activos = Usuario.query.filter(Usuario.rol_id == 2, Usuario.activo == True).count()
-    citas_pendientes_total = Cita.query.filter(Cita.estado == 'pendiente').count()
+    # Citas pendientes total usando relacion
+    citas_pendientes_total = Cita.query.join(EstadoCita).filter(EstadoCita.nombre == 'pendiente').count()
 
     return {
         "totalPacientes": total_pacientes,
@@ -31,13 +35,13 @@ def get_upcoming_appointments(user_rol_id=None, user_id=None):
     # Get upcoming appointments (today and future)
     query = Cita.query.filter(Cita.fecha >= today)
 
-    # Lógica de filtrado por rol:
+    # Lógica de filtrado por rol (usando EstadoCita para normalizacion)
     # 2 = Profesional: debe de verse solo las citas confirmadas para el
     if user_rol_id == 2:
-        query = query.filter(Cita.doctor_id == user_id, Cita.estado == 'confirmada')
+        query = query.join(EstadoCita).filter(Cita.doctor_id == user_id, EstadoCita.nombre == 'confirmada')
     # 3 = Tecnico/Asistente: debe de verse las citas pendientes por confirmar (todas)
     elif user_rol_id == 3:
-        query = query.filter(Cita.estado == 'pendiente')
+        query = query.join(EstadoCita).filter(EstadoCita.nombre == 'pendiente')
     
     # Ordenar por fecha y luego obtener las próximas 10 citas
     citas = query.order_by(Cita.fecha.asc())\
@@ -56,8 +60,8 @@ def get_upcoming_appointments(user_rol_id=None, user_id=None):
             "hora": hora,
             "paciente": f"{cita.paciente.nombres} {cita.paciente.apellido_paterno} {cita.paciente.apellido_materno}" if cita.paciente else "Desconocido",
             "doctor": f"{cita.doctor.nombres_completos}" if cita.doctor else "Sin asignar",
-            "especialidad": cita.area_rel.nombre if cita.area_rel else (cita.area or "General"),
-            "estado": cita.estado.capitalize() if cita.estado else "Pendiente"
+            "especialidad": cita.area_rel.nombre if cita.area_rel else "General",
+            "estado": cita.estado_rel.nombre.capitalize() if cita.estado_rel else "Pendiente"
         })
         
     return proximas_citas

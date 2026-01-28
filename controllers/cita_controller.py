@@ -5,6 +5,8 @@ from models.paciente_model import Paciente
 from models.horario_medico_model import HorarioMedico
 from models.area_model import Area
 from models.usuario_model import Usuario
+from models.persona_model import Persona
+from models.estado_cita_model import EstadoCita
 from models.historial_estado_cita_model import HistorialEstadoCita
 
 from services.pdf_service import PDFService
@@ -83,29 +85,25 @@ class CitaController:
                 query = query.filter_by(area_id=area_id)
             elif area:
                 # Buscar por nombre de área (case-insensitive, parcial)
-                query = query.outerjoin(Area, Cita.area_id == Area.id).filter(
-                    db.or_(
-                        Cita.area.ilike(f"%{area}%"),
-                        Area.nombre.ilike(f"%{area}%")
-                    )
+                query = query.join(Area, Cita.area_id == Area.id).filter(
+                    Area.nombre.ilike(f"%{area}%")
                 )
             # Filtro de estado
             # Para profesionales: solo pueden ver estados específicos
             # (confirmada, atendida, no_asistio, referido) - NO ven pendientes ni canceladas
-            if is_profesional:
-                estados_permitidos = ['confirmada', 'atendida', 'no_asistio', 'referido']
-                if estado and estado in estados_permitidos:
-                    # Si el profesional filtra por un estado permitido, aplicar ese filtro
-                    query = query.filter_by(estado=estado)
+                estados_permitidos_nombres = ['confirmada', 'atendida', 'no_asistio', 'referido']
+                if estado and estado in estados_permitidos_nombres:
+                    # Filtrar por un estado específico
+                     query = query.join(EstadoCita).filter(EstadoCita.nombre == estado)
                 else:
-                    # Si no filtra o filtra por estado no permitido, mostrar todos los permitidos
-                    query = query.filter(Cita.estado.in_(estados_permitidos))
+                    # Mostrar todos los permitidos
+                     query = query.join(EstadoCita).filter(EstadoCita.nombre.in_(estados_permitidos_nombres))
             elif estado:
-                # Para otros roles, aplicar filtro de estado normalmente
-                query = query.filter_by(estado=estado)
+                # Filtrar por nombre de estado normalizado
+                query = query.join(EstadoCita).filter(EstadoCita.nombre == estado)
 
             if paciente_dni:
-                query = query.join(Paciente).filter(Paciente.dni.ilike(f"%{paciente_dni}%"))
+                query = query.join(Paciente).join(Persona, Paciente.persona_id == Persona.id).filter(Persona.dni.ilike(f"%{paciente_dni}%"))
 
             # Filtro por turno (si tiene horario asociado)
             if turno:
@@ -204,10 +202,11 @@ class CitaController:
                 return jsonify({"error": "La fecha no coincide con el horario seleccionado"}), 400
             
             # Contar citas existentes para este horario en esta fecha
-            citas_existentes = Cita.query.filter(
+            # Contar citas existentes usando relación de estado
+            citas_existentes = Cita.query.join(EstadoCita).filter(
                 Cita.horario_id == horario.id,
                 Cita.fecha == fecha_cita,
-                Cita.estado != 'cancelada'
+                EstadoCita.nombre != 'cancelada'
             ).count()
             
             # Validar cupos disponibles
@@ -225,21 +224,51 @@ class CitaController:
             area = Area.query.get(area_id)
             area_nombre = area.nombre if area else "Sin área"
             
+            # Gestionar Acompañante
+            acompanante_persona_id = None
+            dni_ac = data.get("dni_acompanante")
+            if dni_ac:
+                acompanante = Persona.query.filter_by(dni=dni_ac).first()
+                if not acompanante:
+                    acompanante = Persona(
+                        dni=dni_ac,
+                        nombres=data.get("nombres_acompanante", "ACOMPAÑANTE"),
+                        apellido_paterno=data.get("apellido_paterno_acompanante", "."),
+                        apellido_materno=data.get("apellido_materno_acompanante", "."),
+                        telefono=data.get("telefono_acompanante")
+                    )
+                    db.session.add(acompanante)
+                    db.session.flush()
+                else:
+                    # Actualizar datos si existen nuevos valores
+                    if data.get("nombres_acompanante"):
+                        acompanante.nombres = data.get("nombres_acompanante")
+                    if data.get("apellido_paterno_acompanante"):
+                        acompanante.apellido_paterno = data.get("apellido_paterno_acompanante")
+                    if data.get("apellido_materno_acompanante"):
+                        acompanante.apellido_materno = data.get("apellido_materno_acompanante")
+                    # Actualizar teléfono si cambió
+                    if data.get("telefono_acompanante"):
+                        acompanante.telefono = data.get("telefono_acompanante")
+                
+                acompanante_persona_id = acompanante.id
+
             # Crear la cita
             nueva_cita = Cita(
                 paciente_id=data["paciente_id"],
                 horario_id=horario.id,
                 doctor_id=horario.medico_id,
                 area_id=area_id,
-                area=area_nombre,
                 fecha=fecha_cita,
                 sintomas=data["sintomas"],
-                dni_acompanante=data.get("dni_acompanante"),
-                nombre_acompanante=data.get("nombre_acompanante"),
-                telefono_acompanante=data.get("telefono_acompanante"),
-                datos_adicionales=data.get("datos_adicionales"),
-                estado="pendiente"
+                acompanante_persona_id=acompanante_persona_id,
+                datos_adicionales=data.get("datos_adicionales")
             )
+            
+            # Buscar estado pendiente
+            estado_pendiente = EstadoCita.query.filter_by(nombre="pendiente").first()
+            if estado_pendiente:
+                nueva_cita.estado_id = estado_pendiente.id
             
             db.session.add(nueva_cita)
             db.session.commit()
@@ -310,23 +339,47 @@ class CitaController:
                 return jsonify({"error": "Cita no encontrada"}), 404
 
             # Guardar estado anterior para el historial
-            estado_anterior = cita.estado
+            estado_anterior = cita.estado_nombre
             estado_nuevo = data.get("estado")
 
             if "doctor_id" in data:
                 cita.doctor_id = data["doctor_id"]
-            if "area" in data:
-                cita.area = data["area"]
+            if "area_id" in data:
+                cita.area_id = data["area_id"]
             if "sintomas" in data:
                 cita.sintomas = data["sintomas"]
             if "estado" in data:
-                cita.estado = data["estado"]
+                # Actualizar relación de estado
+                nuevo_estado_obj = EstadoCita.query.filter_by(nombre=data["estado"]).first()
+                if nuevo_estado_obj:
+                    cita.estado_id = nuevo_estado_obj.id
             if "dni_acompanante" in data:
-                cita.dni_acompanante = data["dni_acompanante"]
-            if "nombre_acompanante" in data:
-                cita.nombre_acompanante = data["nombre_acompanante"]
-            if "telefono_acompanante" in data:
-                cita.telefono_acompanante = data["telefono_acompanante"]
+                dni_ac = data["dni_acompanante"]
+                if dni_ac:
+                    ac = Persona.query.filter_by(dni=dni_ac).first()
+                    if not ac:
+                        ac = Persona(
+                            dni=dni_ac,
+                            nombres=data.get("nombres_acompanante", "ACOMPAÑANTE"),
+                            apellido_paterno=data.get("apellido_paterno_acompanante", "."),
+                            apellido_materno=data.get("apellido_materno_acompanante", "."),
+                            telefono=data.get("telefono_acompanante")
+                        )
+                        db.session.add(ac)
+                        db.session.flush()
+                    else:
+                        if "nombres_acompanante" in data:
+                            ac.nombres = data["nombres_acompanante"]
+                        if "apellido_paterno_acompanante" in data:
+                            ac.apellido_paterno = data["apellido_paterno_acompanante"]
+                        if "apellido_materno_acompanante" in data:
+                            ac.apellido_materno = data["apellido_materno_acompanante"]
+                        if "telefono_acompanante" in data:
+                            ac.telefono = data["telefono_acompanante"]
+                    cita.acompanante_persona_id = ac.id
+                else:
+                    cita.acompanante_persona_id = None
+
             if "datos_adicionales" in data:
                 if cita.datos_adicionales and isinstance(data["datos_adicionales"], dict):
                     cita.datos_adicionales.update(data["datos_adicionales"])
@@ -453,10 +506,10 @@ class CitaController:
             
             # Consultar citas confirmadas ordenadas por fecha de registro (orden de llegada)
             # Usamos JOIN con HorarioMedico para poder filtrar por médico si es necesario
-            query = Cita.query.join(HorarioMedico).filter(
+            query = Cita.query.join(HorarioMedico).join(EstadoCita).filter(
                 Cita.fecha == fecha_obj,
                 Cita.area_id == area_id,
-                Cita.estado == 'confirmada'
+                EstadoCita.nombre == 'confirmada'
             )
             
             if medico_id:
@@ -577,10 +630,10 @@ class CitaController:
                 # Validar que el médico exista es opcional aquí, pero útil
             
             # Construir consulta
-            query = Cita.query.join(HorarioMedico).filter(
+            query = Cita.query.join(HorarioMedico).join(EstadoCita).filter(
                 HorarioMedico.area_id == area_id,
                 HorarioMedico.fecha == fecha_obj,
-                Cita.estado == 'confirmada'
+                EstadoCita.nombre == 'confirmada'
             )
             
             # Filtrar por médico si se proporciona

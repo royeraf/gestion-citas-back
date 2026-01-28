@@ -9,6 +9,7 @@ Implementa las 3 dimensiones para la tesis:
 from flask import jsonify, request
 from extensions.database import db
 from models.cita_model import Cita
+from models.estado_cita_model import EstadoCita
 from models.horario_medico_model import HorarioMedico
 from models.area_model import Area
 from sqlalchemy import func, case, extract
@@ -71,10 +72,10 @@ class IndicadorController:
             cupos_totales = cupos_query.scalar() or 0
             
             # Query para citas no canceladas
-            citas_query = db.session.query(func.count(Cita.id)).filter(
+            citas_query = db.session.query(func.count(Cita.id)).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin,
-                Cita.estado != 'cancelada'
+                EstadoCita.nombre != 'cancelada'
             )
             if area_id:
                 citas_query = citas_query.filter(Cita.area_id == area_id)
@@ -87,10 +88,10 @@ class IndicadorController:
             # Fórmula: (Citas No Asistió / Citas Confirmadas Totales) * 100
             
             # Citas con estado final (confirmadas que llegaron a resolución)
-            citas_confirmadas_query = db.session.query(func.count(Cita.id)).filter(
+            citas_confirmadas_query = db.session.query(func.count(Cita.id)).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin,
-                Cita.estado.in_(['confirmada', 'atendida', 'no_asistio'])
+                EstadoCita.nombre.in_(['confirmada', 'atendida', 'no_asistio'])
             )
             if area_id:
                 citas_confirmadas_query = citas_confirmadas_query.filter(Cita.area_id == area_id)
@@ -98,10 +99,10 @@ class IndicadorController:
             citas_confirmadas_total = citas_confirmadas_query.scalar() or 0
             
             # No shows
-            no_shows_query = db.session.query(func.count(Cita.id)).filter(
+            no_shows_query = db.session.query(func.count(Cita.id)).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin,
-                Cita.estado == 'no_asistio'
+                EstadoCita.nombre == 'no_asistio'
             )
             if area_id:
                 no_shows_query = no_shows_query.filter(Cita.area_id == area_id)
@@ -118,10 +119,10 @@ class IndicadorController:
                 func.avg(
                     func.cast(Cita.fecha, db.Date) - func.cast(Cita.fecha_registro, db.Date)
                 )
-            ).filter(
+            ).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin,
-                Cita.estado != 'cancelada',
+                EstadoCita.nombre != 'cancelada',
                 Cita.fecha.isnot(None)
             )
             if area_id:
@@ -133,10 +134,10 @@ class IndicadorController:
             # ==================== ESTADÍSTICAS ADICIONALES ====================
             
             # Citas atendidas
-            citas_atendidas_query = db.session.query(func.count(Cita.id)).filter(
+            citas_atendidas_query = db.session.query(func.count(Cita.id)).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin,
-                Cita.estado == 'atendida'
+                EstadoCita.nombre == 'atendida'
             )
             if area_id:
                 citas_atendidas_query = citas_atendidas_query.filter(Cita.area_id == area_id)
@@ -144,10 +145,10 @@ class IndicadorController:
             citas_atendidas = citas_atendidas_query.scalar() or 0
             
             # Citas canceladas
-            citas_canceladas_query = db.session.query(func.count(Cita.id)).filter(
+            citas_canceladas_query = db.session.query(func.count(Cita.id)).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin,
-                Cita.estado == 'cancelada'
+                EstadoCita.nombre == 'cancelada'
             )
             if area_id:
                 citas_canceladas_query = citas_canceladas_query.filter(Cita.area_id == area_id)
@@ -258,14 +259,15 @@ class IndicadorController:
             citas_query = db.session.query(
                 group_func.label('periodo'),
                 func.count(Cita.id).label('total_citas'),
-                func.count(case((Cita.estado != 'cancelada', 1))).label('citas_no_canceladas'),
-                func.count(case((Cita.estado == 'no_asistio', 1))).label('no_shows'),
-                func.count(case((Cita.estado == 'atendida', 1))).label('atendidas'),
-                func.count(case((Cita.estado.in_(['confirmada', 'atendida', 'no_asistio']), 1))).label('confirmadas_total'),
+                # Usar EstadoCita para filtros
+                func.count(case((EstadoCita.nombre != 'cancelada', 1))).label('citas_no_canceladas'),
+                func.count(case((EstadoCita.nombre == 'no_asistio', 1))).label('no_shows'),
+                func.count(case((EstadoCita.nombre == 'atendida', 1))).label('atendidas'),
+                func.count(case((EstadoCita.nombre.in_(['confirmada', 'atendida', 'no_asistio']), 1))).label('confirmadas_total'),
                 func.avg(
                     func.cast(Cita.fecha, db.Date) - func.cast(Cita.fecha_registro, db.Date)
                 ).label('lead_time_promedio')
-            ).filter(
+            ).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin
             )
@@ -366,14 +368,14 @@ class IndicadorController:
                 Area.id.label('area_id'),
                 Area.nombre.label('area_nombre'),
                 func.count(Cita.id).label('total_citas'),
-                func.count(case((Cita.estado != 'cancelada', 1))).label('citas_no_canceladas'),
-                func.count(case((Cita.estado == 'no_asistio', 1))).label('no_shows'),
-                func.count(case((Cita.estado == 'atendida', 1))).label('atendidas'),
-                func.count(case((Cita.estado.in_(['confirmada', 'atendida', 'no_asistio']), 1))).label('confirmadas_total'),
+                func.count(case((EstadoCita.nombre != 'cancelada', 1))).label('citas_no_canceladas'),
+                func.count(case((EstadoCita.nombre == 'no_asistio', 1))).label('no_shows'),
+                func.count(case((EstadoCita.nombre == 'atendida', 1))).label('atendidas'),
+                func.count(case((EstadoCita.nombre.in_(['confirmada', 'atendida', 'no_asistio']), 1))).label('confirmadas_total'),
                 func.avg(
                     func.cast(Cita.fecha, db.Date) - func.cast(Cita.fecha_registro, db.Date)
                 ).label('lead_time_promedio')
-            ).join(Area, Cita.area_id == Area.id).filter(
+            ).join(Area, Cita.area_id == Area.id).join(EstadoCita).filter(
                 Cita.fecha >= fecha_inicio,
                 Cita.fecha <= fecha_fin
             ).group_by(Area.id, Area.nombre).all()

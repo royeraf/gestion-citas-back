@@ -2,6 +2,7 @@ from flask import jsonify
 from extensions.database import db
 from models.paciente_model import Paciente
 from models.cita_model import Cita
+from models.persona_model import Persona
 from datetime import datetime
 
 class PacienteController:
@@ -9,12 +10,21 @@ class PacienteController:
     @staticmethod
     def buscar_por_dni(dni):
         try:
-            # 1. Buscar en BD local
-            paciente = Paciente.query.filter_by(dni=dni).first()
+            # 1. Buscar si ya existe como PACIENTE
+            paciente = Paciente.query.join(Persona).filter(Persona.dni == dni).first()
             if paciente:
-                return jsonify(paciente.to_dict()), 200
+                data = paciente.to_dict()
+                data["tipo_existencia"] = "paciente"
+                return jsonify(data), 200
             
-            # 2. Si no existe, buscar en API externa
+            # 2. Si no es paciente, buscar si ya existe como PERSONA (ej: es usuario)
+            persona = Persona.query.filter_by(dni=dni).first()
+            if persona:
+                data = persona.to_dict()
+                data["tipo_existencia"] = "persona"
+                return jsonify(data), 200
+            
+            # 3. Si no existe localmente, buscar en API externa
             from services.api_dni_services import ApiPeruDevService
             api_response = ApiPeruDevService.get_data_by_dni(dni)
             
@@ -25,7 +35,8 @@ class PacienteController:
                     "nombres": data.get("nombres"),
                     "apellido_paterno": data.get("apellido_paterno"),
                     "apellido_materno": data.get("apellido_materno"),
-                    "origen": "reniec" # Indicador para el frontend
+                    "origen": "reniec",
+                    "tipo_existencia": "reniec"
                 }), 200
 
             return jsonify({"error": "Paciente no encontrado"}), 404
@@ -44,11 +55,12 @@ class PacienteController:
 
             if search:
                 search_term = f"%{search}%"
-                query = query.filter(
-                    (Paciente.dni.ilike(search_term)) |
-                    (Paciente.nombres.ilike(search_term)) |
-                    (Paciente.apellido_paterno.ilike(search_term)) |
-                    (Paciente.apellido_materno.ilike(search_term))
+                # Unimos con Persona para buscar en los datos centralizados
+                query = query.join(Persona).filter(
+                    (Persona.dni.ilike(search_term)) |
+                    (Persona.nombres.ilike(search_term)) |
+                    (Persona.apellido_paterno.ilike(search_term)) |
+                    (Persona.apellido_materno.ilike(search_term))
                 )
 
             # Ordenar por fecha de registro descendente (más recientes primero)
@@ -88,17 +100,46 @@ class PacienteController:
                 if field not in data or not data[field]:
                     return jsonify({"error": f"El campo '{field}' es obligatorio"}), 400
 
-            # Verificar si el paciente ya existe
-            paciente = Paciente.query.filter_by(dni=data["dni"]).first()
+            # 1. Gestionar la Persona (Centralizada)
+            persona = Persona.query.filter_by(dni=data["dni"]).first()
+            fecha_nac = datetime.strptime(data["fecha_nacimiento"], "%Y-%m-%d")
+            
+            if not persona:
+                persona = Persona(
+                    dni=data["dni"],
+                    nombres=data["nombres"],
+                    apellido_paterno=data["apellido_paterno"],
+                    apellido_materno=data["apellido_materno"],
+                    fecha_nacimiento=fecha_nac,
+                    sexo=data["sexo"],
+                    telefono=data.get("telefono"),
+                    email=data.get("email"),
+                    direccion=data["direccion"]
+                )
+                db.session.add(persona)
+            else:
+                # Actualizar datos de la persona
+                persona.nombres = data["nombres"]
+                persona.apellido_paterno = data["apellido_paterno"]
+                persona.apellido_materno = data["apellido_materno"]
+                persona.fecha_nacimiento = fecha_nac
+                persona.sexo = data["sexo"]
+                persona.telefono = data.get("telefono")
+                persona.email = data.get("email")
+                persona.direccion = data["direccion"]
+            
+            db.session.flush() # Asegurar tener persona.id
+
+            # 2. Gestionar el Paciente (Rol específico)
+            paciente = Paciente.query.join(Persona).filter(Persona.dni == data["dni"]).first()
             is_new = paciente is None
 
+            if persona.id and not is_new and not paciente.persona_id:
+                paciente.persona_id = persona.id
+
             if paciente:
-                # Actualizar datos del paciente existente
-                paciente.nombres = data["nombres"]
-                paciente.apellido_paterno = data["apellido_paterno"]
-                paciente.apellido_materno = data["apellido_materno"]
-                paciente.fecha_nacimiento = datetime.strptime(data["fecha_nacimiento"], "%Y-%m-%d")
-                paciente.sexo = data["sexo"]
+                # Actualizar datos propios del paciente y vínculo
+                paciente.persona_id = persona.id
                 paciente.estado_civil = data["estado_civil"]
                 paciente.grado_instruccion = data.get("grado_instruccion")
                 paciente.religion = data.get("religion")
@@ -110,14 +151,9 @@ class PacienteController:
                 paciente.seguro = data.get("seguro")
                 paciente.numero_seguro = data.get("numero_seguro")
             else:
-                # Crear nuevo paciente
+                # Crear nuevo paciente vinculado a la persona
                 paciente = Paciente(
-                    dni=data["dni"],
-                    nombres=data["nombres"],
-                    apellido_paterno=data["apellido_paterno"],
-                    apellido_materno=data["apellido_materno"],
-                    fecha_nacimiento=datetime.strptime(data["fecha_nacimiento"], "%Y-%m-%d"),
-                    sexo=data["sexo"],
+                    persona_id=persona.id,
                     estado_civil=data["estado_civil"],
                     grado_instruccion=data.get("grado_instruccion"),
                     religion=data.get("religion"),

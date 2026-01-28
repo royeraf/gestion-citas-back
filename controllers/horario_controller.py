@@ -280,12 +280,13 @@ class HorarioController:
             turno = request.args.get('turno')  # 'M' o 'T'
             
             # Subconsulta para contar citas activas por horario_id
-            # Cuenta solo citas no canceladas
+            # Cuenta solo citas no canceladas usando EstadoCita
+            from models.estado_cita_model import EstadoCita
             citas_count_subq = db.session.query(
                 Cita.horario_id,
                 func.count(Cita.id).label('citas_activas')
-            ).filter(
-                Cita.estado != 'cancelada'
+            ).join(EstadoCita).filter(
+                EstadoCita.nombre != 'cancelada'
             ).group_by(Cita.horario_id).subquery()
             
             # Query principal con LEFT JOIN a la subconsulta

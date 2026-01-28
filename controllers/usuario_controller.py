@@ -2,6 +2,7 @@ from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions.database import db
 from models.usuario_model import Usuario
+from models.persona_model import Persona
 from models.horario_medico_model import HorarioMedico
 from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
 from flask import make_response
@@ -17,11 +18,26 @@ class UsuarioController:
                 if field not in data or not data[field]:
                     return jsonify({"error": f"El campo '{field}' es obligatorio"}), 400
 
-            # Verificar usuario existente
-            if Usuario.query.filter_by(dni=data["dni"]).first():
-                return jsonify({"error": "El dni ya está registrado"}), 409
+            # Verificar usuario existente por DNI a través de Persona
+            if Usuario.query.join(Persona).filter(Persona.dni == data["dni"]).first():
+                return jsonify({"error": "El DNI ya está registrado como usuario"}), 409
 
+            # 1. Gestionar Persona
+            persona = Persona.query.filter_by(dni=data["dni"]).first()
+            if not persona:
+                nombres = data.get("nombres_completos", "Usuario")
+                persona = Persona(
+                    dni=data["dni"],
+                    nombres=nombres,
+                    apellido_paterno="",
+                    apellido_materno=""
+                )
+                db.session.add(persona)
+                db.session.flush()
+
+            # 2. Gestionar Usuario
             usuario = Usuario(
+                persona_id=persona.id,
                 dni=data["dni"],
                 password=generate_password_hash(data["password"]),
                 rol_id=data["rol_id"],
@@ -48,7 +64,8 @@ class UsuarioController:
         if not dni or not password:
             return jsonify({"error": "dni y password son requeridos"}), 400
 
-        usuario = Usuario.query.filter_by(dni=dni).first()
+        # Buscar por DNI uniendo con Persona
+        usuario = Usuario.query.join(Persona).filter(Persona.dni == dni).first()
 
         if not usuario:
             return jsonify({"error": "Credenciales incorrectas"}), 401
@@ -124,6 +141,7 @@ class UsuarioController:
         try:
             from models.area_model import Area
             from models.cita_model import Cita
+            from models.estado_cita_model import EstadoCita
             from sqlalchemy import func, desc
             from datetime import date
             
@@ -179,9 +197,11 @@ class UsuarioController:
                 func.count(Cita.id).label('occupied_count')
             ).join(
                 Cita, Cita.horario_id == HorarioMedico.id
+            ).join(
+                EstadoCita, Cita.estado_id == EstadoCita.id
             ).filter(
                 HorarioMedico.fecha >= today,
-                Cita.estado != 'cancelada'
+                EstadoCita.nombre != 'cancelada'
             )
 
             if area_id_filter:
@@ -235,14 +255,15 @@ class UsuarioController:
                 medico_dict['name'] = usuario.nombres_completos
                 medico_dict['area_id'] = area_id
                 medico_dict['area_nombre'] = area_nombre
-                medico_dict['especialidad'] = area_nombre
+                medico_dict['especialidad'] = area_nombre  # Alias para compatibilidad
                 
                 # Calcular cupos disponibles reales
                 cupos_disponibles = int(total_cupos) - int(occupied)
                 
                 medico_dict['disponibilidad'] = {
                     'turnos': int(turnos),
-                    'cupos': max(0, cupos_disponibles) # Evitar negativos por si acaso
+                    'cupos': max(0, cupos_disponibles),
+                    'ocupados': int(occupied)
                 }
                 lista_medicos.append(medico_dict)
             
@@ -286,11 +307,12 @@ class UsuarioController:
             search = request.args.get('search')
             if search:
                 search_pattern = f"%{search}%"
-                query = query.filter(
+                query = query.join(Persona).filter(
                     db.or_(
-                        Usuario.nombres_completos.ilike(search_pattern),
-                        Usuario.username.ilike(search_pattern),
-                        Usuario.dni.ilike(search_pattern)
+                        Persona.nombres.ilike(search_pattern),
+                        Persona.apellido_paterno.ilike(search_pattern),
+                        Persona.apellido_materno.ilike(search_pattern),
+                        Persona.dni.ilike(search_pattern)
                     )
                 )
 
@@ -316,7 +338,7 @@ class UsuarioController:
                 lista.append({
                     "id": u.id,
                     "name": u.nombres_completos or u.dni,
-                    "username": u.username or u.dni,
+                    "username": u.dni,
                     "role": role_key,
                     "role_nombre": role_names.get(u.rol_id, str(u.rol_id)),
                     "dni": u.dni,
@@ -350,7 +372,7 @@ class UsuarioController:
             return jsonify({
                 "id": usuario.id,
                 "name": usuario.nombres_completos or usuario.dni,
-                "username": usuario.username or usuario.dni,
+                "username": usuario.dni,
                 "role": role_mapping_reverse.get(usuario.rol_id, usuario.rol_id),
                 "dni": usuario.dni,
                 "activo": usuario.activo,
@@ -388,15 +410,16 @@ class UsuarioController:
             if 'name' in data:
                 usuario.nombres_completos = data['name']
             
-            if 'username' in data:
-                # Verificar que el username no esté en uso por otro usuario
-                existing = Usuario.query.filter(
-                    Usuario.username == data['username'],
+            identifier = data.get('username') or data.get('dni')
+            if identifier and identifier != usuario.dni:
+                # Verificar que el nuevo DNI no esté en uso por otro usuario
+                existing = Usuario.query.join(Persona).filter(
+                    Persona.dni == identifier,
                     Usuario.id != usuario_id
                 ).first()
                 if existing:
-                    return jsonify({"error": "El nombre de usuario ya está en uso"}), 409
-                usuario.username = data['username']
+                    return jsonify({"error": "El DNI ya está en uso por otro usuario"}), 409
+                usuario.dni = identifier
 
             if 'password' in data and data['password']:
                 usuario.password = generate_password_hash(data['password'])
@@ -422,7 +445,7 @@ class UsuarioController:
                 "usuario": {
                     "id": usuario.id,
                     "name": usuario.nombres_completos or usuario.dni,
-                    "username": usuario.username or usuario.dni,
+                    "username": usuario.dni,
                     "role": role_mapping_reverse.get(usuario.rol_id, usuario.rol_id),
                     "dni": usuario.dni,
                     "activo": usuario.activo
@@ -489,25 +512,42 @@ class UsuarioController:
                 'asistente': 3
             }
 
-            # Verificar username único
-            if Usuario.query.filter_by(username=data["username"]).first():
-                return jsonify({"error": "El nombre de usuario ya está registrado"}), 409
+            # El identificador principal es el DNI
+            dni = data.get("dni") or data.get("username")
+            if not dni:
+                 return jsonify({"error": "El DNI es obligatorio"}), 400
 
-            # Generar DNI automático si no se proporciona (o usar username como identificador)
-            dni = data.get("dni") or data["username"]
+            # Verificar DNI único en tabla personas vinculadas a usuarios
+            if Usuario.query.join(Persona).filter(Persona.dni == dni).first():
+                return jsonify({"error": "El DNI ya está registrado como usuario"}), 409
             
-            # Verificar DNI único
-            if Usuario.query.filter_by(dni=dni).first():
-                return jsonify({"error": "El DNI ya está registrado"}), 409
+            # 1. Gestionar Persona
+            persona = Persona.query.filter_by(dni=dni).first()
+            if not persona:
+                # Dividir nombre si es posible (aproximación)
+                parts = data["name"].split(' ')
+                p_nombres = parts[0]
+                p_ap1 = parts[1] if len(parts) > 1 else ""
+                p_ap2 = " ".join(parts[2:]) if len(parts) > 2 else ""
 
+                persona = Persona(
+                    dni=dni,
+                    nombres=p_nombres,
+                    apellido_paterno=p_ap1,
+                    apellido_materno=p_ap2
+                )
+                db.session.add(persona)
+                db.session.flush()
+
+            # 2. Gestionar Usuario
             usuario = Usuario(
-                dni=dni,
-                username=data["username"],
+                persona_id=persona.id,
                 password=generate_password_hash(data["password"]),
                 rol_id=role_mapping.get(data["role"], data["role"]),
                 nombres_completos=data["name"],
                 activo=True
             )
+
 
             db.session.add(usuario)
             db.session.commit()
@@ -523,7 +563,7 @@ class UsuarioController:
                 "usuario": {
                     "id": usuario.id,
                     "name": usuario.nombres_completos,
-                    "username": usuario.username,
+                    "username": usuario.dni,
                     "role": role_mapping_reverse.get(usuario.rol_id, usuario.rol_id),
                     "dni": usuario.dni,
                     "activo": usuario.activo,
