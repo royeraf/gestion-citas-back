@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from controllers.usuario_controller import UsuarioController
 from middleware.auth_middleware import token_required, roles_required
-from extensions.jwt_manager import JWTManager
+
 from flask import jsonify
 
 
@@ -21,23 +21,24 @@ def login():
     return UsuarioController.login(data)
 
 # REFRESH
+# REFRESH
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
 @usuario_bp.post("/refresh")
+@jwt_required(refresh=True)
 def refresh():
-    refresh_token = request.cookies.get("refresh_token")
+    try:
+        # get_jwt_identity() retrieves the identity stored in the refresh token
+        identity = get_jwt_identity()
+        
+        # Create new access token
+        new_access = create_access_token(identity=identity)
+        
+        return jsonify({"access_token": new_access}), 200
+        
+    except Exception as e:
+         return jsonify({"error": "Error al renovar token", "details": str(e)}), 401
 
-    if not refresh_token:
-        return jsonify({"error": "No hay refresh token"}), 401
-
-    decoded = JWTManager.decode_token(refresh_token)
-
-    if "error" in decoded:
-        return jsonify(decoded), 401
-
-    user_data = decoded["data"]
-
-    new_access = JWTManager.create_access_token(user_data)
-
-    return jsonify({"access_token": new_access})
 
 
 # EJEMPLO DE RUTA PROTEGIDA

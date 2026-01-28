@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from extensions.database import db
 from models.usuario_model import Usuario
 from models.horario_medico_model import HorarioMedico
-from extensions.jwt_manager import JWTManager
+from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
 from flask import make_response
 
 
@@ -56,11 +56,15 @@ class UsuarioController:
         if not check_password_hash(usuario.password, password):
             return jsonify({"error": "Credenciales incorrectas"}), 401
 
-        access = JWTManager.create_access_token({
+        # Use dictionary as identity to maintain compatibility with frontend/middleware
+        identity_data = {
             "id": usuario.id,
             "dni": usuario.dni,
             "rol_id": usuario.rol_id
-        })
+        }
+
+        access = create_access_token(identity=identity_data)
+        refresh = create_refresh_token(identity=identity_data)
 
         response = make_response({
             "message": "Login exitoso",
@@ -71,11 +75,7 @@ class UsuarioController:
         # Guardar refresh token como cookie HTTP-Only
         response.set_cookie(
             "refresh_token",
-            JWTManager.create_refresh_token({
-                "id": usuario.id,
-                "dni": usuario.dni,
-                "rol_id": usuario.rol_id
-            }),
+            refresh,
             httponly=True,
             secure=False,  # Cambiar a True en producción HTTPS
             samesite="Strict",

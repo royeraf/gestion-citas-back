@@ -1,39 +1,21 @@
-import jwt
-from datetime import datetime, timedelta
-from flask import current_app
+from flask_jwt_extended import JWTManager
+from models.usuario_model import Usuario
 
+jwt = JWTManager()
 
-class JWTManager:
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    # If it's a dict (legacy support), return the id as string
+    if isinstance(user, dict):
+        return str(user.get("id"))
+    # If it's the User model object
+    if hasattr(user, 'id'):
+        return str(user.id)
+    # Default return as string
+    return str(user)
 
-    @staticmethod
-    def create_access_token(data, expires_minutes=15):
-        payload = {
-            "exp": datetime.utcnow() + timedelta(minutes=expires_minutes),
-            "iat": datetime.utcnow(),
-            "type": "access",
-            "data": data
-        }
-        token = jwt.encode(
-            payload, current_app.config["SECRET_KEY"], algorithm="HS256")
-        return token
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return Usuario.query.filter_by(id=identity).first()
 
-    @staticmethod
-    def create_refresh_token(data, expires_days=7):
-        payload = {
-            "exp": datetime.utcnow() + timedelta(days=expires_days),
-            "iat": datetime.utcnow(),
-            "type": "refresh",
-            "data": data
-        }
-        token = jwt.encode(
-            payload, current_app.config["SECRET_KEY"], algorithm="HS256")
-        return token
-
-    @staticmethod
-    def decode_token(token):
-        try:
-            return jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            return {"error": "Token expirado"}
-        except jwt.InvalidTokenError:
-            return {"error": "Token inválido"}

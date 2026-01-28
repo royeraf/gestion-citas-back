@@ -1,5 +1,7 @@
 import pymysql
-from config import MYSQL_CONFIG
+from config import Config
+
+MYSQL_CONFIG = Config.MYSQL_CONFIG
 
 def get_connection():
     return pymysql.connect(

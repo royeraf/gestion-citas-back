@@ -1,5 +1,7 @@
 import requests
-from config import API_PERU_DEV_TOKEN
+from config import Config
+
+API_PERU_DEV_TOKEN = Config.API_PERU_DEV_TOKEN
 
 class ApiPeruDevService:
     BASE_URL = "https://apiperu.dev/api/dni"

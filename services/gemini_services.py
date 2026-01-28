@@ -1,6 +1,8 @@
 import requests
 import json
-from config import GEMINI_API_KEY
+from config import Config
+
+GEMINI_API_KEY = Config.GEMINI_API_KEY
 
 class GeminiService:
     # URL base para la API de Google Generative AI
