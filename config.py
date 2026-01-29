@@ -12,8 +12,25 @@ class Config:
     
     # IMPORTANTE: Para usar cookies HttpOnly
     JWT_TOKEN_LOCATION = ['cookies'] 
-    JWT_COOKIE_SECURE = False  # False para HTTP local
-    JWT_COOKIE_SAMESITE = 'Lax'
+    
+    # Configuración de Cookies Dinámica
+    def _get_env_bool(name, default):
+        val = os.getenv(name, str(default)).strip().strip('"').strip("'").lower()
+        return val == 'true'
+
+    def _get_env_str(name, default):
+        return os.getenv(name, default).strip().strip('"').strip("'")
+
+    JWT_COOKIE_SECURE = _get_env_bool('JWT_COOKIE_SECURE', False)
+    _samesite = _get_env_str('JWT_COOKIE_SAMESITE', 'Lax')
+    
+    # Manejar caso especial "None" (requerido para cross-domain en HTTPS)
+    if _samesite.lower() == 'none':
+        JWT_COOKIE_SAMESITE = 'None'
+        JWT_COOKIE_SECURE = True # Los navegadores obligan a Secure=True si SameSite=None
+    else:
+        JWT_COOKIE_SAMESITE = _samesite
+
     JWT_ACCESS_COOKIE_NAME = 'access_token'
     JWT_REFRESH_COOKIE_NAME = 'refresh_token'
     JWT_COOKIE_CSRF_PROTECT = False # Desactivar CSRF para simplificar desarrollo
@@ -45,14 +62,6 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
-    JWT_COOKIE_SECURE = os.getenv('JWT_COOKIE_SECURE', 'True').lower() == 'true'
-    _samesite = os.getenv('JWT_COOKIE_SAMESITE', 'Lax')
-    # Manejar caso especial "None" que debe ser string, no NoneType, pero si viene null de env
-    if _samesite.lower() == 'none':
-        JWT_COOKIE_SAMESITE = 'None'
-        JWT_COOKIE_SECURE = True # Obligatorio si SameSite=None
-    else:
-        JWT_COOKIE_SAMESITE = _samesite
     
     # Optimizations for Supabase/Railway
     SQLALCHEMY_ENGINE_OPTIONS = {
