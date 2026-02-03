@@ -500,17 +500,33 @@ class UsuarioController:
         """
         Crea un nuevo usuario con todos los campos requeridos por el frontend.
         
-        Body JSON:
-        - name: Nombre completo
-        - username: Nombre de usuario
+        Body JSON (nuevo formato):
+        - nombres: Nombres de la persona
+        - apellido_paterno: Apellido paterno
+        - apellido_materno: Apellido materno
+        - dni: DNI (8 dígitos)
         - password: Contraseña
-        - role: Rol (admin, medico, asistente)
+        - role: Rol (admin, profesional, asistente)
+        
+        Body JSON (formato legacy):
+        - name: Nombre completo
+        - username: Nombre de usuario (DNI)
+        - password: Contraseña
+        - role: Rol
         """
         try:
-            required = ["name", "username", "password", "role"]
-            for field in required:
-                if field not in data or not data[field]:
-                    return jsonify({"error": f"El campo '{field}' es obligatorio"}), 400
+            # Soportar tanto el nuevo formato como el legacy
+            dni = data.get("dni") or data.get("username")
+            password = data.get("password")
+            role = data.get("role")
+            
+            # Validar campos obligatorios
+            if not dni:
+                return jsonify({"error": "El campo 'dni' es obligatorio"}), 400
+            if not password:
+                return jsonify({"error": "El campo 'password' es obligatorio"}), 400
+            if not role:
+                return jsonify({"error": "El campo 'role' es obligatorio"}), 400
 
             # Mapear roles del frontend al backend (enteros)
             role_mapping = {
@@ -520,11 +536,6 @@ class UsuarioController:
                 'asistente': 3
             }
 
-            # El identificador principal es el DNI
-            dni = data.get("dni") or data.get("username")
-            if not dni:
-                 return jsonify({"error": "El DNI es obligatorio"}), 400
-
             # Verificar DNI único en tabla personas vinculadas a usuarios
             if Usuario.query.join(Persona).filter(Persona.dni == dni).first():
                 return jsonify({"error": "El DNI ya está registrado como usuario"}), 409
@@ -532,11 +543,12 @@ class UsuarioController:
             # 1. Gestionar Persona
             persona = Persona.query.filter_by(dni=dni).first()
             if not persona:
+                # Obtener nombres del nuevo formato o del legacy
                 p_nombres = data.get("nombres")
                 p_ap1 = data.get("apellido_paterno")
                 p_ap2 = data.get("apellido_materno")
 
-                # Si no vienen divididos, intentar split del 'name'
+                # Si no vienen divididos, intentar split del 'name' (formato legacy)
                 if not p_nombres and "name" in data:
                     parts = data["name"].split(' ')
                     p_nombres = parts[0]
