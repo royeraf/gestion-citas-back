@@ -33,6 +33,7 @@ class Config:
 
     JWT_ACCESS_COOKIE_NAME = 'access_token'
     JWT_REFRESH_COOKIE_NAME = 'refresh_token'
+    JWT_SESSION_COOKIE = False  # Cookies persisten según JWT_*_TOKEN_EXPIRES
     JWT_COOKIE_CSRF_PROTECT = False # Desactivar CSRF para simplificar desarrollo
     JWT_ACCESS_CSRF_COOKIE_NAME = "csrf_access_token"
     JWT_REFRESH_CSRF_COOKIE_NAME = "csrf_refresh_token"
