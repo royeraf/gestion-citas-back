@@ -109,8 +109,8 @@ class IndicadorController:
             
             no_shows = no_shows_query.scalar() or 0
             
-            tasa_inasistencia = round((no_shows / citas_confirmadas_total * 100), 2) if citas_confirmadas_total > 0 else 0
-            
+            tasa_inasistencia = round((no_shows / cupos_totales * 100), 2) if cupos_totales > 0 else 0
+
             # ==================== INDICADOR 3: LEAD TIME (TIEMPO DE ANTICIPACIÓN) ====================
             # Fórmula: Promedio de (Fecha Cita - Fecha Registro)
             # En PostgreSQL: la resta de dos fechas devuelve INTEGER (días)
@@ -301,9 +301,9 @@ class IndicadorController:
                 cupos = cupos_data.get(periodo_str, 0) or 0
                 
                 utilizacion = round((row.citas_no_canceladas / cupos * 100), 2) if cupos > 0 else 0
-                tasa_inasistencia = round((row.no_shows / row.confirmadas_total * 100), 2) if row.confirmadas_total > 0 else 0
+                tasa_inasistencia = round((row.no_shows / cupos * 100), 2) if cupos > 0 else 0
                 lead_time = round(float(row.lead_time_promedio), 2) if row.lead_time_promedio else 0
-                
+
                 resultado.append({
                     'periodo': periodo_str,
                     'utilizacion_capacidad': utilizacion,
@@ -397,9 +397,9 @@ class IndicadorController:
                 cupos = cupos_dict.get(row.area_id, 0)
                 
                 utilizacion = round((row.citas_no_canceladas / cupos * 100), 2) if cupos > 0 else 0
-                tasa_inasistencia = round((row.no_shows / row.confirmadas_total * 100), 2) if row.confirmadas_total > 0 else 0
+                tasa_inasistencia = round((row.no_shows / cupos * 100), 2) if cupos > 0 else 0
                 lead_time = round(float(row.lead_time_promedio), 2) if row.lead_time_promedio else 0
-                
+
                 resultado.append({
                     'area_id': row.area_id,
                     'area_nombre': row.area_nombre,

@@ -22,6 +22,7 @@ from routes.indicador_routes import indicador_bp
 from routes.catalogo_routes import catalogo_bp
 from routes.especialidad_routes import especialidad_bp
 from routes.manual_routes import manual_bp
+from routes.reporte_routes import reporte_bp
 
 load_dotenv()
 
@@ -74,6 +75,7 @@ def create_app(config_name=None):
     app.register_blueprint(catalogo_bp, url_prefix="/api/catalogos")
     app.register_blueprint(especialidad_bp, url_prefix="/api/especialidades")
     app.register_blueprint(manual_bp, url_prefix="/api/manuales")
+    app.register_blueprint(reporte_bp, url_prefix="/api/reportes")
     
     # Global Health Check
     @app.route('/api/health', methods=['GET'])

@@ -1,0 +1,460 @@
+Loading /home/royer/Desktop/project-citas-medicas/Tesis.docx ...
+Total tables in document: 46
+
+
+################################################################################
+# SECTION 1: TABLE 32 - Matriz de consistencia
+################################################################################
+
+================================================================================
+TABLE 32 - Matriz de consistencia
+  Rows: 8,  Cols: 8
+================================================================================
+  Row   0: PROBLEMAS  ||  OBJETIVOS  ||  HIPÓTESIS  ||  HIPÓTESIS  ||  VARIABLES  ||  DIMENSIONES  ||  INDICADOR  ||  METODOLOGÍA
+  Row   1: General  ||  General  ||  General  ||  General  ||  Independiente  ||  PRESENCIA/AUSENCIA  ||  PRESENCIA/AUSENCIA  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+  Row   2: 𝐏𝑮: ¿De qué manera el SISTEMA WEB influye en la gestión de citas médicas en el Centro de Salud La Unión?  ||  𝐎𝑮: Determinar la influencia del SISTEMA WEB en la gestión de citas médicas en el Centro de Salud La Unión.  ||  𝐇𝑮: El SISTEMA WEB mejora significativamente en la gestión de cita médicas en el Centro de Salud La Unión.  ||  SISTEMA WEB  ||  SISTEMA WEB  ||  PRESENCIA/AUSENCIA  ||  PRESENCIA/AUSENCIA  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+  Row   3: Específicos  ||  Específicos  ||  Específicas  ||  Específicas  ||  Dependiente  ||  Utilización de la capacidad  ||  Porcentaje de Ocupación  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+  Row   4: 𝐏𝐄𝟏: ¿De qué manera el SISTEMA WEB influye en la utilización de la capacidad en la gestión de citas médicas en el Centro de Salud La Unión?  ||  𝐎𝐄𝟏: Determinar la influencia del SISTEMA WEB en la utilización de la capacidad en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟏: El SISTEMA WEB incrementa significativamente la utilización de la capacidad en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟏: El SISTEMA WEB incrementa significativamente la utilización de la capacidad en la gestión de citas médicas en el Centro de Salud La Unión  ||  GESTIÓN DE CITAS MÉDICAS  ||  Utilización de la capacidad  ||  Porcentaje de Ocupación  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+  Row   5: 𝐏𝐄3: ¿De qué manera el SISTEMA WEB influye en el tiempo de espera en la gestión de citas médicas en el Centro de Salud La Unión?  ||  𝐎𝐄3: Determinar la influencia del SISTEMA WEB en el tiempo de espera en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟐: El SISTEMA WEB reduce significativamente el tiempo de espera en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟐: El SISTEMA WEB reduce significativamente el tiempo de espera en la gestión de citas médicas en el Centro de Salud La Unión  ||  GESTIÓN DE CITAS MÉDICAS  ||  Tiempo de Espera  ||  Días Promedio de Anticipación  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+  Row   6: 𝐏𝐄𝟐: ¿De qué manera el SISTEMA WEB influye en la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión?  ||  𝐎𝐄𝟐: Determinar la influencia del SISTEMA WEB en la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟐: El SISTEMA WEB reduce significativamente la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟐: El SISTEMA WEB reduce significativamente la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión  ||  GESTIÓN DE CITAS MÉDICAS  ||  Tasa de Inasistencia  ||  Porcentaje de No-Espectáculos  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+  Row   7: 𝐏𝐄𝟐: ¿De qué manera el SISTEMA WEB influye en la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión?  ||  𝐎𝐄𝟐: Determinar la influencia del SISTEMA WEB en la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟐: El SISTEMA WEB reduce significativamente la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión  ||  𝐇𝐄𝟐: El SISTEMA WEB reduce significativamente la tasa de inasistencia en la gestión de citas médicas en el Centro de Salud La Unión  ||  (empty)  ||  Tasa de Inasistencia  ||  Porcentaje de No-Espectáculos  ||  TIPO DE INVESTIGACIÓN | Aplicada  | DISEÑO DE INVESTIGACIÓN | Experimental | Pre – Experimental | ENFOQUE | Cuantitativo  | POBLACIÓN | 53 registros del sistema | MUESTRA | Número representativo de la población. | 50 registros del sistema | TECNICAS E INTRUMENTOS | Ficha de registro | Validación experta 
+
+
+################################################################################
+# SECTION 2: TABLES 33-38 - Operationalization / Ficha de registro
+################################################################################
+
+================================================================================
+TABLE 33 - Operationalization / Ficha de registro
+  Rows: 5,  Cols: 8
+================================================================================
+  Row   0: Variables  ||  Definición conceptual  ||  Definición operacional  ||  Dimensiones  ||  Indicadores  ||  Ítems  ||  Escala de medición  ||  Instrumento
+  Row   1: VI:SISTEMA WEB  ||  se describe como una manifestación concreta del avance en tecnologías de la información y comunicación, funcionando como un medio para la diseminación de información rápida y precisa. Su propósito central es obtener, gestionar, recolectar, analizar y distribuir información con objetivos específicos. Requieren un soporte adecuado, siendo la facilidad en su proceso de creación y uso una de sus principales fortalezas. El desarrollo de estos sistemas es un proceso incremental que se inicia al describir las necesidades del usuario en términos de un enfoque estratégico, culminando en un sistema de calidad e integrado. En este proceso, la participación del usuario y la integración del sistema representan el factor más crucial para el éxito del desarrollo. (Nusa & Faisal, 2020).  ||  Plataforma de software que funciona bajo la arquitectura Modelo – Vista – Controlador, accesible mediante navegadores estándar como Chrome o Firefox, operacionalmente dividido en backend (lógica del sistema), frontend (interfaces de usuario e interaccion), gestión de datos (almacenamiento y recuperación de datos)    ||  Presencia / Ausencia  ||  Presencia / Ausencia  ||  Presencia / Ausencia  ||  Presencia / Ausencia  ||  Presencia / Ausencia
+  Row   2: VD:Gestión de citas médicas  ||  La Gestión de Citas Médicas (Appointment Scheduling o AS, Programación de citas) es un sistema esencial en clínicas y hospitales, cuyo objetivo central es equilibrar la asignación de recursos médicos limitados con la satisfacción del paciente en un entorno de alta demanda. El problema principal del AS consiste en crear una programación que asigne un intervalo de tiempo disponible a cada paciente para reducir el tiempo de espera del paciente y el tiempo de inactividad del médico. La investigación en su optimización es crucial, ya que el AS es fundamentalmente un problema complejo de asignación de recursos en ingeniería industrial y de operaciones, que debe considerar incertidumbres como la impuntualidad del paciente, las inasistencias (no-shows) y las interrupciones del personal médico. (Niu et al., 2024).  ||  Proceso estandarizado mediante el cual se hace coincidir la oferta de servicios de salud con la demanda de los pacientes, evaluado cuantitativamente a través de los tiempos de espera y la tasa de inasistencias.  ||  Utilización de Capacidad  ||  Porcentaje de Ocupación  ||  Promedio diario de pacientes dividido por disponibilidad de cupos  ||  Razón (%)  ||  Ficha de registro
+  Row   3: VD:Gestión de citas médicas  ||  La Gestión de Citas Médicas (Appointment Scheduling o AS, Programación de citas) es un sistema esencial en clínicas y hospitales, cuyo objetivo central es equilibrar la asignación de recursos médicos limitados con la satisfacción del paciente en un entorno de alta demanda. El problema principal del AS consiste en crear una programación que asigne un intervalo de tiempo disponible a cada paciente para reducir el tiempo de espera del paciente y el tiempo de inactividad del médico. La investigación en su optimización es crucial, ya que el AS es fundamentalmente un problema complejo de asignación de recursos en ingeniería industrial y de operaciones, que debe considerar incertidumbres como la impuntualidad del paciente, las inasistencias (no-shows) y las interrupciones del personal médico. (Niu et al., 2024).  ||  Proceso estandarizado mediante el cual se hace coincidir la oferta de servicios de salud con la demanda de los pacientes, evaluado cuantitativamente a través de los tiempos de espera y la tasa de inasistencias.  ||  Tiempo de Espera  ||  Días Promedio de Anticipación  ||  Intervalo de tiempo transcurrido desde el punto de inicio hasta el servicio  ||  Razón (Días)  ||  Ficha de registro
+  Row   4: VD:Gestión de citas médicas  ||  La Gestión de Citas Médicas (Appointment Scheduling o AS, Programación de citas) es un sistema esencial en clínicas y hospitales, cuyo objetivo central es equilibrar la asignación de recursos médicos limitados con la satisfacción del paciente en un entorno de alta demanda. El problema principal del AS consiste en crear una programación que asigne un intervalo de tiempo disponible a cada paciente para reducir el tiempo de espera del paciente y el tiempo de inactividad del médico. La investigación en su optimización es crucial, ya que el AS es fundamentalmente un problema complejo de asignación de recursos en ingeniería industrial y de operaciones, que debe considerar incertidumbres como la impuntualidad del paciente, las inasistencias (no-shows) y las interrupciones del personal médico. (Niu et al., 2024).  ||  Proceso estandarizado mediante el cual se hace coincidir la oferta de servicios de salud con la demanda de los pacientes, evaluado cuantitativamente a través de los tiempos de espera y la tasa de inasistencias.  ||  Tasa de Inasistencia  ||  Porcentaje de No-Shows  ||  Conteo histórico de variabilidad de la demanda (citas canceladas)  ||  Razón (%)  ||  Ficha de registro
+
+================================================================================
+TABLE 34 - Operationalization / Ficha de registro
+  Rows: 14,  Cols: 5
+================================================================================
+  Row   0: Ficha de registro  ||  Ficha de registro  ||  Ficha de registro  ||  Ficha de registro  ||  Ficha de registro
+  Row   1: Investigador  ||  Investigador  ||  Investigador  ||  ROYER JESUS ARIZA FABIAN  ||  ROYER JESUS ARIZA FABIAN
+  Row   2: Fecha  ||  Fecha  ||  Fecha  ||  18/12/2025  ||  18/12/2025
+  Row   3: Dimensión  ||  Dimensión  ||  Dimensión  ||  Utilización de Capacidad  ||  Utilización de Capacidad
+  Row   4: Indicador  ||  Indicador  ||  Indicador  ||  Porcentaje de Ocupación  ||  Porcentaje de Ocupación
+  Row   5: Formula  ||  Formula  ||  Formula  ||  [MATH: Utilización  % =  Citas programadas (no canceladas) Total de cupos disponibles ×100]  ||  [MATH: Utilización  % =  Citas programadas (no canceladas) Total de cupos disponibles ×100]
+  Row   6: Tamaño de la muestra  ||  Tamaño de la muestra  ||  Tamaño de la muestra  ||  50 REGISTROS DEL SISTEMA  ||  50 REGISTROS DEL SISTEMA
+  Row   7: N°  ||  Fecha  ||  Citas programadas (no canceladas)  ||  Citas programadas (no canceladas)  ||  Total de cupos disponibles
+  Row   8: 1  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row   9: 2  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  10: 3  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  11: 4  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  12: … 50  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  13: Porcentaje de utilización de la capacidad (%)  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+
+================================================================================
+TABLE 35 - Operationalization / Ficha de registro
+  Rows: 2,  Cols: 6
+================================================================================
+  Row   0: N°  ||  Indicador  ||  Claridad  ||  Pertinencia  ||  Relevancia  ||  Observaciones
+  Row   1: 1  ||  Porcentaje de Ocupación  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+
+================================================================================
+TABLE 36 - Operationalization / Ficha de registro
+  Rows: 14,  Cols: 5
+================================================================================
+  Row   0: Ficha de registro  ||  Ficha de registro  ||  Ficha de registro  ||  Ficha de registro  ||  Ficha de registro
+  Row   1: Investigador  ||  Investigador  ||  Investigador  ||  ROYER JESUS ARIZA FABINA  ||  ROYER JESUS ARIZA FABINA
+  Row   2: Fecha  ||  Fecha  ||  Fecha  ||  18/12/2025  ||  18/12/2025
+  Row   3: Dimensión  ||  Dimensión  ||  Dimensión  ||  Tiempo de Espera  ||  Tiempo de Espera
+  Row   4: Indicador  ||  Indicador  ||  Indicador  ||  Días Promedio de Anticipación  ||  Días Promedio de Anticipación
+  Row   5: Formula  ||  Formula  ||  Formula  ||  [MATH: Lead Time  días =Fecha de la cita-Fecha de solicitud de la Cita]  ||  [MATH: Lead Time  días =Fecha de la cita-Fecha de solicitud de la Cita]
+  Row   6: Tamaño de la muestra  ||  Tamaño de la muestra  ||  Tamaño de la muestra  ||  50 REGISTROS DEL SISTEMA  ||  50 REGISTROS DEL SISTEMA
+  Row   7: N°  ||  Fecha  ||  Fecha de la cita  ||  Fecha de la cita  ||  Fecha de solicitud de la cita
+  Row   8: 1  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row   9: 2  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  10: 3  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  11: 4  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  12: … 50  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  13: Días promedio de anticipación  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+
+================================================================================
+TABLE 37 - Operationalization / Ficha de registro
+  Rows: 2,  Cols: 6
+================================================================================
+  Row   0: N°  ||  Indicador  ||  Claridad  ||  Pertinencia  ||  Relevancia  ||  Observaciones
+  Row   1: 1  ||  Días Promedio de Anticipación  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+
+================================================================================
+TABLE 38 - Operationalization / Ficha de registro
+  Rows: 14,  Cols: 5
+================================================================================
+  Row   0: Ficha de registro  ||  Ficha de registro  ||  Ficha de registro  ||  Ficha de registro  ||  Ficha de registro
+  Row   1: Investigador  ||  Investigador  ||  Investigador  ||  ROYER JESUS ARIZA FABINA  ||  ROYER JESUS ARIZA FABINA
+  Row   2: Fecha  ||  Fecha  ||  Fecha  ||  18/12/2025  ||  18/12/2025
+  Row   3: Dimensión  ||  Dimensión  ||  Dimensión  ||  Tasa de Inasistencia  ||  Tasa de Inasistencia
+  Row   4: Indicador  ||  Indicador  ||  Indicador  ||  Porcentaje de No-Shows  ||  Porcentaje de No-Shows
+  Row   5: Formula  ||  Formula  ||  Formula  ||  [MATH: Inasistencia  % = Citas con estado 'no asistió' Citas confirmadas totales ×100]  ||  [MATH: Inasistencia  % = Citas con estado 'no asistió' Citas confirmadas totales ×100]
+  Row   6: Tamaño de la muestra  ||  Tamaño de la muestra  ||  Tamaño de la muestra  ||  50 REGISTROS DEL SISTEMA  ||  50 REGISTROS DEL SISTEMA
+  Row   7: N°  ||  Fecha  ||  Citas con estado ‘no asistió’  ||  Citas con estado ‘no asistió’  ||  Citas confirmadas totales
+  Row   8: 1  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row   9: 2  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  10: 3  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  11: 4  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  12: … 50  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+  Row  13: Porcentaje de inasistencia (%)  ||  (empty)  ||  (empty)  ||  (empty)  ||  (empty)
+
+
+################################################################################
+# SECTION 3: TABLES 40-45 - Pre-test / Post-test data
+################################################################################
+
+================================================================================
+TABLE 40 - Pre/Post test data
+  Rows: 52,  Cols: 5
+================================================================================
+  HEADER (Row 0): N°  ||  Fecha deregistro  ||  Fecha desolicitud  ||  Fecha dela cita  ||  Días deAnticipación
+  Total data rows (excluding header): 51
+
+  --- First 5 data rows ---
+  Row   1: 1  ||  01/08/2025  ||  01/08/2025  ||  09/08/2025  ||  8
+  Row   2: 2  ||  04/08/2025  ||  04/08/2025  ||  11/08/2025  ||  7
+  Row   3: 3  ||  05/08/2025  ||  05/08/2025  ||  11/08/2025  ||  6
+  Row   4: 4  ||  06/08/2025  ||  06/08/2025  ||  12/08/2025  ||  6
+  Row   5: 5  ||  07/08/2025  ||  07/08/2025  ||  14/08/2025  ||  7
+
+  --- Last 3 data rows ---
+  Row  49: 49  ||  08/10/2025  ||  08/10/2025  ||  19/10/2025  ||  11
+  Row  50: 50  ||  09/10/2025  ||  09/10/2025  ||  15/10/2025  ||  6
+  Row  51: (empty)  ||  (empty)  ||  (empty)  ||  PROMEDIO  ||  8.56
+
+  >> Last column ('Días deAnticipación') numeric values found: 51
+  >> Average of last column: 8.5600
+  >> Min: 4.0000,  Max: 15.0000
+  >> StdDev: 2.6089
+
+================================================================================
+TABLE 41 - Pre/Post test data
+  Rows: 52,  Cols: 5
+================================================================================
+  HEADER (Row 0): N°  ||  Fecha de registro  ||  Fecha de solicitud  ||  Fecha de la cita  ||  Días de Anticipación
+  Total data rows (excluding header): 51
+
+  --- First 5 data rows ---
+  Row   1: 1  ||  09/12/2025  ||  09/12/2025  ||  15/12/2025  ||  6
+  Row   2: 2  ||  09/12/2025  ||  09/12/2025  ||  12/12/2025  ||  3
+  Row   3: 3  ||  10/12/2025  ||  10/12/2025  ||  12/12/2025  ||  2
+  Row   4: 4  ||  11/12/2025  ||  11/12/2025  ||  13/12/2025  ||  2
+  Row   5: 5  ||  11/12/2025  ||  11/12/2025  ||  15/12/2025  ||  4
+
+  --- Last 3 data rows ---
+  Row  49: 49  ||  20/01/2026  ||  20/01/2026  ||  23/01/2026  ||  3
+  Row  50: 50  ||  22/01/2026  ||  22/01/2026  ||  24/01/2026  ||  2
+  Row  51: (empty)  ||  (empty)  ||  (empty)  ||  Promedio  ||  3.24
+
+  >> Last column ('Días de Anticipación') numeric values found: 51
+  >> Average of last column: 3.2400
+  >> Min: 1.0000,  Max: 6.0000
+  >> StdDev: 1.2893
+
+================================================================================
+TABLE 42 - Pre/Post test data
+  Rows: 52,  Cols: 5
+================================================================================
+  HEADER (Row 0): N°  ||  Fecha  ||  Citas programadas(no canceladas)  ||  Total de cuposdisponibles  ||  Porcentaje deOcupación (%)
+  Total data rows (excluding header): 51
+
+  --- First 5 data rows ---
+  Row   1: 1  ||  01/08/2025  ||  12  ||  25  ||  48.00%
+  Row   2: 2  ||  04/08/2025  ||  11  ||  25  ||  44.00%
+  Row   3: 3  ||  05/08/2025  ||  10  ||  25  ||  40.00%
+  Row   4: 4  ||  06/08/2025  ||  10  ||  25  ||  40.00%
+  Row   5: 5  ||  07/08/2025  ||  9  ||  25  ||  36.00%
+
+  --- Last 3 data rows ---
+  Row  49: 49  ||  08/10/2025  ||  9  ||  25  ||  36.00%
+  Row  50: 50  ||  09/10/2025  ||  13  ||  25  ||  52.00%
+  Row  51: (empty)  ||  (empty)  ||  (empty)  ||  PROMEDIO  ||  44.96%
+
+  >> Last column ('Porcentaje deOcupación (%)') numeric values found: 51
+  >> Average of last column: 44.9600
+  >> Min: 28.0000,  Max: 64.0000
+  >> StdDev: 7.5709
+
+================================================================================
+TABLE 43 - Pre/Post test data
+  Rows: 52,  Cols: 5
+================================================================================
+  HEADER (Row 0): N°  ||  Fecha  ||  Citas programadas (no canceladas)  ||  Total de cupos disponibles  ||  Porcentaje de ocupación (%)
+  Total data rows (excluding header): 51
+
+  --- First 5 data rows ---
+  Row   1: 1  ||  09/12/2025  ||  20  ||  25  ||  80.00%
+  Row   2: 2  ||  10/12/2025  ||  19  ||  25  ||  76.00%
+  Row   3: 3  ||  11/12/2025  ||  16  ||  25  ||  64.00%
+  Row   4: 4  ||  12/12/2025  ||  15  ||  25  ||  60.00%
+  Row   5: 5  ||  13/12/2025  ||  17  ||  25  ||  68.00%
+
+  --- Last 3 data rows ---
+  Row  49: 49  ||  06/02/2026  ||  15  ||  25  ||  60.00%
+  Row  50: 50  ||  07/02/2026  ||  18  ||  25  ||  72.00%
+  Row  51: (empty)  ||  (empty)  ||  (empty)  ||  Promedio  ||  69.20%
+
+  >> Last column ('Porcentaje de ocupación (%)') numeric values found: 51
+  >> Average of last column: 69.2000
+  >> Min: 52.0000,  Max: 84.0000
+  >> StdDev: 7.4297
+
+================================================================================
+TABLE 44 - Pre/Post test data
+  Rows: 52,  Cols: 5
+================================================================================
+  HEADER (Row 0): N°  ||  Fecha  ||  Citas estado'no asistió'  ||  Citas confirmadastotales  ||  Porcentaje deNo-Shows (%)
+  Total data rows (excluding header): 51
+
+  --- First 5 data rows ---
+  Row   1: 1  ||  01/08/2025  ||  6  ||  25  ||  24.00%
+  Row   2: 2  ||  04/08/2025  ||  7  ||  25  ||  28.00%
+  Row   3: 3  ||  05/08/2025  ||  6  ||  25  ||  24.00%
+  Row   4: 4  ||  06/08/2025  ||  6  ||  25  ||  24.00%
+  Row   5: 5  ||  07/08/2025  ||  8  ||  25  ||  32.00%
+
+  --- Last 3 data rows ---
+  Row  49: 49  ||  08/10/2025  ||  7  ||  25  ||  28.00%
+  Row  50: 50  ||  09/10/2025  ||  7  ||  25  ||  28.00%
+  Row  51: (empty)  ||  (empty)  ||  (empty)  ||  PROMEDIO  ||  24.88%
+
+  >> Last column ('Porcentaje deNo-Shows (%)') numeric values found: 51
+  >> Average of last column: 24.8800
+  >> Min: 12.0000,  Max: 40.0000
+  >> StdDev: 6.4145
+
+================================================================================
+TABLE 45 - Pre/Post test data
+  Rows: 52,  Cols: 5
+================================================================================
+  HEADER (Row 0): N°  ||  Fecha  ||  Citas estado 'no asistió'  ||  Citas confirmadas totales  ||  Porcentaje de No-Shows (%)
+  Total data rows (excluding header): 51
+
+  --- First 5 data rows ---
+  Row   1: 1  ||  09/12/2025  ||  3  ||  25  ||  12.00%
+  Row   2: 2  ||  10/12/2025  ||  2  ||  25  ||  8.00%
+  Row   3: 3  ||  11/12/2025  ||  2  ||  25  ||  8.00%
+  Row   4: 4  ||  12/12/2025  ||  2  ||  25  ||  8.00%
+  Row   5: 5  ||  13/12/2025  ||  3  ||  25  ||  12.00%
+
+  --- Last 3 data rows ---
+  Row  49: 49  ||  06/02/2026  ||  2  ||  25  ||  8.00%
+  Row  50: 50  ||  07/02/2026  ||  4  ||  25  ||  16.00%
+  Row  51: (empty)  ||  (empty)  ||  (empty)  ||  Promedio  ||  11.04%
+
+  >> Last column ('Porcentaje de No-Shows (%)') numeric values found: 51
+  >> Average of last column: 11.0400
+  >> Min: 4.0000,  Max: 24.0000
+  >> StdDev: 3.8831
+
+
+################################################################################
+# SECTION 4: Paragraphs about sampling methodology
+################################################################################
+
+  [Para   80] (style=Normal)
+    La programación de citas médicas en establecimientos del primer nivel de atención enfrenta desafíos como la subutilización de la capacidad instalada, prolongados tiempos de espera y altas tasas de inasistencia, problemáticas que afectan la calidad del servicio y la satisfacción de los pacientes. En el Centro de Salud La Unión, región Huánuco, estas dificultades se acentúan por el déficit de recursos humanos e infraestructura, según datos del Ministerio de Salud (2023). Para atender esta problemá ...
+
+  [Para   86] (style=Normal)
+    Medical appointment scheduling in primary healthcare facilities faces challenges such as underutilization of installed capacity, prolonged waiting times, and high no-show rates — issues that affect service quality and patient satisfaction. At the Centro de Salud La Unión, in the Huánuco region, these difficulties are further compounded by a shortage of human resources and infrastructure, according to data from the Ministry of Health (2023). To address this problem, a Web-based Medical Appointmen ...
+
+  [Para  162] (style=Normal)
+    En Latinoamérica, la situación se agrava por la persistencia de modelos que generan la desarticulación y división en los sistemas de provisión de servicios sanitarios, favoreciendo enfoques curativos centrados en las especialidades médicas y sustentados en tecnologías costosas orientadas al beneficio financiero. Esta estructura genera desigualdad en la prestación de servicios a diferentes poblaciones, obstaculizando la implementación efectiva de estrategias de mejoramiento integral sanitaria y e ...
+
+  [Para  166] (style=Normal)
+    El presente estudio correspondió a una investigación de tipo aplicada, desarrollado bajo un diseño preexperimental, empleando un enfoque cuantitativo y orientándose hacia un nivel explicativo. Se trabajó con un conjunto muestral de 50 casos obtenidos del sistema, elegidos a través de un muestreo no probabilístico de forma intencional, con fichas técnicas de registro empleadas en calidad de herramientas destinadas a la recopilación de datos mediante juicio de expertos con un coeficiente V de Aike ...
+
+  [Para  167] (style=Normal)
+    Los análisis realizados muestran que el despliegue del sistema web generó mejoras estadísticamente significativas en las tres dimensiones evaluadas, evidenciando una relación directa entre la automatización de los procesos de gestión de citas y la optimización de los indicadores operativos del centro de salud. El porcentaje de ocupación se incrementó de 44.96% a 69.20%, representando un aumento de 24.24 pp en la utilización de la capacidad instalada, atribuible a la asignación sistemática de tur ...
+
+  [Para  170] (style=Normal)
+    En esta sección, correspondiente al Capítulo III, se explica la metodología aplicada en el estudio, describiendo el marco metodológico que incluye el diseño experimental preexperimental, el tipo de investigación aplicada, el enfoque cuantitativo, el alcance explicativo, la población y muestra, los instrumentos y técnicas de recolección de datos, así como las técnicas de validación mediante juicio de expertos y cálculo del coeficiente V de Aiken. Asimismo, este capítulo presenta la metodología de ...
+
+  [Para  172] (style=Normal)
+    El Capítulo V expuso los resultados obtenidos en la investigación, organizados en análisis descriptivo de los tres indicadores, análisis inferencial mediante pruebas de normalidad de Shapiro-Wilk, y pruebas de hipótesis mediante la prueba de rangos con signo de Wilcoxon para muestras relacionadas, culminando con un resumen consolidado de los hallazgos. Finalmente, se desarrollaron la discusión de resultados contrastando los hallazgos con los antecedentes teóricos y empíricos, las conclusiones qu ...
+
+  [Para  178] (style=Normal)
+    De acuerdo con la OMS y otras agencias, en regiones del mediterráneo Oriental, enfrenta desafíos complejos donde la coexistencia de deficiencias estructurales en la calidad de la APS (atención primaria en salud), como en Pakistán con el aumento de amenazas emergentes y barreas sociosanitarias para la prevención limita el potencial de los sistemas de salud para avanzar en el logro de los compromisos establecidos en los objetivos de desarrollo sostenible vinculados a la salud. Esta situación se ag ...
+
+  [Para  179] (style=Normal)
+    En Latinoamérica, a pesar de promover la atención primaria de salud estas regiones continúan enfrentando grandes dificultades. Se derivan principalmente en su base del modelo neoliberal, lo que genera lo que da lugar a una provisión de servicios de salud desarticulada y poco cohesionada, favoreciendo un modelo de atención sanitaria basado en la intervención terapéutica y enfocado en servicios de salud altamente especializados, sustentado en tecnologías médicas que requieren una significativa inv ...
+
+  [Para  180] (style=Normal)
+    A nivel nacional, la atención primaria en salud presenta múltiples limitaciones relacionadas con la cobertura, la disponibilidad de personal especializado y la calidad del servicio. Estas dificultades afectan la capacidad del sistema para brindar una atención oportuna y adecuada a la población, especialmente en regiones fuera de Lima. En el caso de la Región Huánuco, los problemas se hacen más evidentes. Según el Perfil de Situación de Salud Minsa (2023), la región enfrenta un déficit de 687 méd ...
+
+  [Para  227] (style=Normal)
+    Akingbade & Onwuasoanya (2022) en su estudio sobre sistema web basado en un enfoque de agendamiento doctor-paciente y manejo de base de datos (Caso de estudio del policlínico federal Ilaro Clinic) (IRE Journals) describieron que el problema principal en la clínica de la Federal Polytechnic Ilaro eran las extensas filas y retrasos en la atención, la frustración por tener que dejar el trabajo solo para encontrar una larga espera, y la ineficiencia del método manual de archivo médico. Para solucion ...
+
+  [Para  232] (style=Normal)
+    Alcantara y Filios (2025) en su estudio relacionado con una solución web destinada a administrar las citas médicas en un policlínico (Universidad Nacional José Faustino Sánchez Carrión) describieron que las citas médicas se controlaban con un sistema no centralizado, lo que provocaba una gestión ineficiente, problemas de registro, dificultad en las consultas de información y generación de reportes imprecisos, afectando la calidad del servicio. Se consideró emplear un paradigma cuantitativo, con  ...
+
+  [Para  233] (style=Normal)
+    Cervantes (2022) en su estudio de gestión de citas bajo una plataforma web (Universidad Católica de Santa María) describió que el Policlínico Vásquez realizaba la administración de consultas, análisis y expedientes clínicos de forma manual, lo que causaba demoras en la atención, duplicidad de información, y un mal manejo de los resultados de laboratorio, ocasionando la no fidelización del paciente. La solución fue el despliegue de un sistema web empleando el marco de trabajo Scrum, utilizando Ja ...
+
+  [Para  236] (style=Normal)
+    Fernández León (2022) en su estudio relacionado con el desarrollo de un sistema web de historias clínicas electrónicas en el Hospital Belén de Lambayeque describió que el proceso de consultas ambulatorias se gestionaba de forma manual, lo que provocaba inconsistencia en los datos, duplicidad de historias y una atención ineficiente a los pacientes al momento de sacar una cita médica. Se consideró aplicar un diseño de contrastación lineal (pre-test/post-test) de investigación tecnológica y aplicad ...
+
+  [Para  260] (style=Normal)
+    La popularidad de Kanban en los últimos años es debido a su capacidad para reducir desperdicios y mejorar el flujo, es empleado en industrias de desarrollo ágil y también se sugiere emplearlo en universidades. Los principios fundamentales de Kanban las cuales son limitar el trabajo en progreso (WIP), visualizar el flujo de trabajo, medir y gestionar el flujo, hacer explícitas las políticas de procesos y usar modelos para mejorar, dando énfasis en limitar el WIP y visualizar el flujo para el moni ...
+
+  [Para  278] (style=Normal)
+    Según Mahalakshmi et al. (2023) el marco metodológico se define como un modelo lógico que guía al investigador a través de las diversas etapas del estudio para recolectar, analizar e interpretar observaciones de manera sistemática. Esta sección fundamental del reporte de investigación debe describir detalladamente el diseño del estudio (clasificado generalmente en estudios observacionales o de intervención), la población objetivo, el método y tamaño de la muestra, así como las técnicas específic ...
+
+  [Para  281] (style=Normal)
+    Este estudio se estructuró a partir de un diseño experimental con enfoque preexperimental, dado que se usó un grupo de estudio, con una muestra aleatoria, en la cual se buscó influir con un mínimo control en la variable dependiente. Como menciona Bacon-Shone (2022) el diseño de investigación preexperimental se caracteriza por ser una aproximación preliminar que carece de los mecanismos rigurosos de control, como la aleatorización, necesarios para establecer una causalidad sólida entre variables. ...
+
+  [Para  286] (style=Normal)
+    El enfoque aplicado al trabajo es cuantitativo ya que se medió el rendimiento en los procedimientos de asignación de citas, relacionados a sus dimensiones e indicadores. Según Nagle (2025) La investigación cuantitativa se fundamenta en la obtención ordenada y el procesamiento estadístico de datos numéricos para el análisis de fenómenos y la verificación de hipótesis. Este método requiere la operacionalización precisa de variables, dividiéndolas en efectos fijos (predictores controlados o manipul ...
+
+  [Para  289] (style=Heading 3)
+    Población
+
+  [Para  290] (style=Normal)
+    Según Aguinis (2024) menciona que la población es el "grupo completo" del cual se extrae una muestra, constituyendo la entidad sobre la cual el investigador busca realizar inferencias estadísticas sólidas y generalizar las conclusiones más allá de los participantes directos del estudio. El texto subraya la necesidad de definir con precisión a la "población objetivo" (target population) mediante criterios claros, como características demográficas o niveles de lectura, antes de diseñar los planes  ...
+
+  [Para  291] (style=Normal)
+    La población de la presente investigación estuvo constituida por la totalidad de los registros generados en la base de datos del sistema vinculados al proceso de gestión de citas médicas en el Centro de Salud La Unión. Específicamente, se considera como población el universo de transacciones de agendamiento, atención y cancelación de citas registradas durante el periodo de estudio (N=53).
+
+  [Para  292] (style=Heading 3)
+    Muestra
+
+  [Para  293] (style=Normal)
+    Según Mahalakshmi (2023) define la muestra de manera operativa como el conjunto de observaciones seleccionadas de la población definida, y el tamaño es determinante para la elección de las herramientas de análisis estadístico. El texto establece una distinción técnica clara basada en la cantidad de datos recolectados: clasifica como muestra grande a aquella que consta de más de 30 observaciones, lo cual permite realizar la prueba Z, mientras que una muestra pequeña se define como aquella con men ...
+
+  [Para  294] (style=Normal)
+    Dada la naturaleza de los datos y la importancia de validar los supuestos estadísticos en muestras de esta escala, la elección de la prueba de contraste resulta fundamental. Al respecto, el test de Wilcoxon se define como un procedimiento no paramétrico diseñado específicamente para la comparación de muestras emparejadas, el cual permite evaluar diferencias significativas en la tendencia central de los datos cuando no se cumple el supuesto de normalidad (Numinqo, 2025). De esta manera, el anális ...
+
+  [Para  295] (style=Normal)
+    La muestra estuvo compuesta por un subconjunto representativo de 50 registros del sistema, seleccionados de la población total de 53 registros por conveniencia y según criterios de accesibilidad y pertinencia para el estudio, y asociados a los indicadores establecidos para la medición. La determinación del tamaño muestral de 50 registros se sustenta en criterios metodológicos y estadísticos convergentes. Desde la perspectiva del test de Shapiro-Wilk, utilizado para verificar el criterio de distr ...
+
+  [Para  296] (style=Heading 3)
+    Tipo de muestreo
+
+  [Para  297] (style=Normal)
+    Se aplicó un muestreo no probabilístico por conveniencia. A diferencia de los estudios puramente cualitativos, en esta investigación aplicada de ingeniería, el muestreo por conveniencia se justifica por la necesidad de seleccionar registros que cuenten con la trazabilidad completa de los datos (fecha de solicitud, fecha de cita y estado final). Esto garantiza que la evaluación de los indicadores de rendimiento sea técnica y operativamente viable dentro del entorno hospitalario. El muestreo no pr ...
+
+  [Para  298] (style=Normal)
+    Muestras por conveniencia: Están formadas por los casos disponibles a los cuales el investigador tiene acceso.
+
+  [Para  310] (style=List Paragraph)
+    n = Número de expertos (n = 3)
+
+  [Para  354] (style=Normal)
+    En cuanto a la estructura del tablero kanban, esta debe reflejar la realidad del flujo de trabajo y evolucionar según la madurez de la organización, pasando de simples listas de tareas individuales en niveles bajos a visualizaciones complejas de servicios de extremo a extremo en niveles altos. Un tablero bien estructurado no solo muestra columnas de estado, sino que incorpora elementos críticos como límites de WIP visibles, puntos de compromiso definidos, políticas explícitas para el movimiento  ...
+
+  [Para  378] (style=Normal)
+    Nota. Representación del segundo nivel del modelo C4 que muestra la arquitectura interna del sistema, incluyendo el frontend SPA desarrollado en Vue.js 3, el backend REST en Python Flask, los módulos de autenticación y validación de DNI, y la persistencia en PostgreSQL (Supabase/Railway). Los protocolos de comunicación incluyen HTTPS para servicios web y SSL para conexiones a base de datos. Fuente: Elaboración propia.
+
+  [Para  395] (style=Normal)
+    En este apartado se muestra el modelamiento de la base de datos empleada para la administración de datos
+
+  [Para  493] (style=Normal)
+    En el apartado de citas se muestran las citas de los pacientes para su correcta administración por estados pendiente, confirmada, asistió, no asistió, referido y cancelado.
+
+  [Para  581] (style=Normal)
+    VAN = Σ [Ft / (1 + i)^t] - I₀
+
+  [Para  629] (style=Normal)
+    Nota. Se muestra una mejora significativa en el porcentaje de ocupación tras la implementación del sistema web, incrementando la media de 44.96% a 69.20% (24.24 puntos porcentuales). Además, se observa una reducción en la desviación estándar (de 7.65 a 7.51), indicando mayor homogeneidad en los datos Post-Test.
+
+  [Para  649] (style=Normal)
+    Nota. La tabla muestra una reducción significativa en el porcentaje de no-shows (inasistencias a citas programadas), disminuyendo de 24.88% a 11.04% (reducción de 13.84 puntos porcentuales, equivalente al 55.63%). La desviación estándar se redujo de 6.48 a 3.92.
+
+  [Para  658] (style=Normal)
+    Con el propósito de verificar la distribución normal correspondiente a los tres parámetros evaluados: Porcentaje de Ocupación, Días Promedio de Anticipación y Porcentaje de No-Shows. Considerando que la muestra comprende 50 registros (n = 50), se empleó el test de Shapiro-Wilk, recomendado aplicar en muestras de pequeño a moderado (n <= 50) observaciones conforme lo sugieren Hernández-Sampieri y Mendoza Torres (2023). La prueba se ejecutó con un nivel de confianza del 95%, estableciendo los sigu ...
+
+  [Para  662] (style=Normal)
+    La verificación del supuesto de normalidad es fundamental para determinar la prueba inferencial adecuada: si ambos grupos (Pre-Test y Post-Test) se ajustan a la normalidad, se aplica la prueba paramétrica t de Student para muestras pareadas; caso contrario, se utiliza la prueba no paramétrica de rangos con signo de Wilcoxon como alternativa.
+
+  [Para  666] (style=Normal)
+    Nota. Se aplicó la prueba de Shapiro-Wilk para evaluar la normalidad de los datos. La muestra Pre-Test exhibe un nivel de significancia superior a 0.05 (p = 0.074), indicando distribución normal. Sin embargo, el grupo Post-Test presenta un valor inferior a 0.05 (p = 0.032), indicando distribución no normal. Dado que al menos un grupo no satisface el criterio de distribución normal, se recurre al test no paramétrico de rangos señalados de Wilcoxon.
+
+  [Para  668] (style=Normal)
+    Como se muestra en la Tabla 23, el valor de Sig. del Porcentaje de Ocupación en el Pre-Test fue de p = 0.074, valor mayor que 0.05, por lo que se concluyó que los datos del Pre-Test se distribuyen normalmente. Sin embargo, en el Post-Test el valor de Sig. fue de p = 0.032, valor menor a 0.05, lo cual señala que los valores del Post-Test no presentan una distribución normal. Dado que al menos uno de los grupos no cumple el supuesto de normalidad, se seleccionó la prueba no paramétrica de rangos c ...
+
+  [Para  683] (style=Normal)
+    Como se muestra en la Tabla 24, el valor de Sig. del Días Promedio de Anticipación en el Pre-Test fue de p = 0.025, y en el Post-Test fue de p = 0.004, ambos valores inferiores a 0.05. De esta manera, se estableció que los valores de ambas muestras no presentan normalidad estadística. Por ende, se adoptó el test no paramétrico de rangos con signo de Wilcoxon como técnica de contrastación de hipótesis.
+
+  [Para  703] (style=Normal)
+    Como se muestra en la Tabla 25, el valor de Sig. del Porcentaje de No-Shows en el Pre-Test fue de p = 0.002, y en el Post-Test fue de p < 0.001, ambos valores menores a 0.05. De este modo, se determinó que los valores de ambas muestras no presentan distribución gaussiana. Por consiguiente, se eligió el test no paramétrico de rangos con signo de Wilcoxon como técnica de contrastación de hipótesis.
+
+  [Para  712] (style=Normal)
+    Para la contrastación de las hipótesis específicas se evaluó previamente el supuesto de normalidad mediante la prueba de Shapiro-Wilk (α = 0.05). La selección de la prueba inferencial se realizó conforme al siguiente criterio: cuando ambos grupos (Pre-Test y Post-Test) cumplieron el supuesto de normalidad, se aplicó la prueba paramétrica t de Student para muestras pareadas; cuando al menos uno de los grupos no cumplió dicho supuesto, se aplicó la prueba no paramétrica de rangos con signo de Wilc ...
+
+  [Para  727] (style=Normal)
+    Nota. Comparativa del porcentaje de ocupación previo y posterior a la puesta en marcha de la plataforma web, evidenciando un incremento de 24.24 puntos porcentuales (de 44.96% a 69.20%), lo que representa una mejora del 53.91%.
+
+  [Para  729] (style=Normal)
+    Dado que los valores no satisfacen la premisa de distribución normal según la prueba de Shapiro-Wilk, se aplicó la prueba no paramétrica de rangos con signo de Wilcoxon para muestras relacionadas como alternativa a la prueba t de Student. La Tabla 26 expone los resultados.
+
+  [Para  732] (style=Normal)
+    Nota. La prueba de rangos con signo de Wilcoxon para muestras relacionadas mostró una diferencia estadísticamente significativa entre las mediciones Pre-Test (44.96) y Post-Test (69.20), con un valor W = 0.0 y p < 0.001. El tamaño del efecto (r = 0.870) se clasifica como grande, lo que indica una diferencia de alta magnitud práctica.
+
+  [Para  737] (style=Normal)
+    Nota. La gráfica muestra la distribución normal estándar utilizada como aproximación para la prueba de Wilcoxon. El valor Z observado se posiciona en la región de rechazo de la hipótesis nula. El p-valor (p < 0.001) confirma la significancia estadística de la diferencia observada.
+
+  [Para  739] (style=Normal)
+    Conclusión: El Sistema Web incrementa significativamente la utilización de la capacidad para la administración de consultas médicas en el establecimiento asistencial La Unión. El Porcentaje de Ocupación aumentó de 44.96% a 69.20%, representando un incremento del 53.91%, con un tamaño del efecto r = 0.870 (grande).
+
+  [Para  752] (style=Normal)
+    El Sistema Web incrementa significativamente la utilización de la capacidad en la gestión de citas médicas en el Centro de Salud La Unión. El Porcentaje de Ocupación aumentó de 44.96% a 69.20%, representando un incremento del 53.91%, con un tamaño del efecto r = 0.870 (grande).
+
+  [Para  760] (style=Normal)
+    Nota. La prueba de rangos con signo de Wilcoxon para muestras relacionadas mostró una diferencia estadísticamente significativa entre las mediciones Pre-Test (8.56) y Post-Test (3.24), con un valor W = 0.0 y p < 0.001. El tamaño del efecto (r = 0.870) se clasifica como grande, lo que indica una diferencia de alta magnitud práctica.
+
+  [Para  764] (style=Normal)
+    Nota. La gráfica muestra la distribución normal estándar utilizada como aproximación para la prueba de Wilcoxon. El valor Z observado se posiciona en la región de rechazo de la hipótesis nula. El p-valor (p < 0.001) confirma la significancia estadística de la diferencia observada.
+
+  [Para  784] (style=Normal)
+    Dado que los valores no satisfacen el criterio de distribución normal conforme al test de Shapiro-Wilk, se aplicó la prueba no paramétrica de rangos con signo de Wilcoxon para muestras relacionadas como alternativa a la prueba t de Student. La Tabla 28 expone los resultados.
+
+  [Para  786] (style=Normal)
+    Nota. La prueba de rangos con signo de Wilcoxon para muestras relacionadas mostró una diferencia estadísticamente significativa entre las mediciones Pre-Test (24.88) y Post-Test (11.04), con un valor W = 0.0 y p < 0.001. El tamaño del efecto (r = 0.835) se clasifica como grande, lo que indica una diferencia de alta magnitud práctica.
+
+  [Para  790] (style=Normal)
+    Nota. La gráfica muestra la distribución normal estándar utilizada como aproximación para la prueba de Wilcoxon. El valor Z observado se posiciona en la región de rechazo de la hipótesis nula. El p-valor (p < 0.001) confirma la significancia estadística de la diferencia observada.
+
+  [Para  819] (style=Normal)
+    Respecto al tercer objetivo específico, dirigido a establecer el efecto de la plataforma web sobre el índice de inasistencia, los hallazgos evidencian una reducción significativa del porcentaje de no-shows, el cual disminuyó desde 24.88% durante el Pre-Test hasta 11.04% en el Post-Test, evidenciando un descenso de 13.84 puntos porcentuales. La prueba de rangos con signo de Wilcoxon (W = 0.0, p < 0.001) confirmó la significancia estadística de esta mejora, con un tamaño del efecto r = 0.835 clasi ...
+
+  [Para  825] (style=Normal)
+    No obstante, es necesario reconocer las limitaciones metodológicas del presente estudio. El diseño preexperimental sin grupo de control constituye una restricción en la validez interna, dado que no permite descartar completamente la influencia de variables confusoras. Sin embargo, su adopción se justificó por restricciones operativas y éticas del contexto institucional: el Centro de Salud La Unión es un único establecimiento donde no resulta viable que un grupo continúe operando exclusivamente c ...
+
+  [Para  831] (style=Normal)
+    Los datos analizados demostraron que el sistema web generó un incremento significativo en la utilización de la capacidad dentro de la gestión de citas médicas en el Centro de Salud La Unión. El porcentaje de ocupación aumentó de 44.96% en el Pre-Test a 69.20% en el Post-Test, aspecto que demostró un ascenso de 24.24 unidades porcentuales. El estadístico de rangos señalados de Wilcoxon reveló un valor W = 0.0 con un p-valor menor a 0.001 y un tamaño del efecto r = 0.870 clasificado como grande, c ...
+
+  [Para  841] (style=Normal)
+    Se recomienda a la Dirección Regional de Salud de Huánuco analizar la viabilidad de extender el uso del sistema web a otros centros de salud de la prestación asistencial correspondientes al primer nivel de atención en el contexto regional, adaptando la solución tecnológica a las características particulares de cada centro de salud. Esta estrategia de escalamiento permitiría extender los beneficios observados en la gestión de citas médicas aplicados en un conjunto poblacional más amplia, favoreci ...
+
+  Total matching paragraphs: 58
+
+################################################################################
+# SECTION 5: Quick overview of tables 28-48 (first row only)
+################################################################################
+
+  Table  28 (3 rows x 6 cols): (empty) || Media || W || Sig. (bilateral) || r (efecto) || Magnitud
+  Table  29 (3 rows x 6 cols): (empty) || Media || W || Sig. (bilateral) || r (efecto) || Magnitud
+  Table  30 (3 rows x 6 cols): (empty) || Media || W || Sig. (bilateral) || r (efecto) || Magnitud
+  Table  31 (4 rows x 8 cols): Hipótesis || Prueba || Pre-Test || Post-Test || Estadístico || Sig. || Tam. Efecto || Decisión
+  Table  32 (8 rows x 8 cols): PROBLEMAS || OBJETIVOS || HIPÓTESIS || HIPÓTESIS || VARIABLES || DIMENSIONES || INDICADOR || METODOLOGÍA
+  Table  33 (5 rows x 8 cols): Variables || Definición conceptual || Definición operacional || Dimensiones || Indicadores || Ítems || Escala de medición || Instrumento
+  Table  34 (14 rows x 5 cols): Ficha de registro || Ficha de registro || Ficha de registro || Ficha de registro || Ficha de registro
+  Table  35 (2 rows x 6 cols): N° || Indicador || Claridad || Pertinencia || Relevancia || Observaciones
+  Table  36 (14 rows x 5 cols): Ficha de registro || Ficha de registro || Ficha de registro || Ficha de registro || Ficha de registro
+  Table  37 (2 rows x 6 cols): N° || Indicador || Claridad || Pertinencia || Relevancia || Observaciones
+  Table  38 (14 rows x 5 cols): Ficha de registro || Ficha de registro || Ficha de registro || Ficha de registro || Ficha de registro
+  Table  39 (2 rows x 6 cols): N° || Indicador || Claridad || Pertinencia || Relevancia || Observaciones
+  Table  40 (52 rows x 5 cols): N° || Fecha deregistro || Fecha desolicitud || Fecha dela cita || Días deAnticipación
+  Table  41 (52 rows x 5 cols): N° || Fecha de registro || Fecha de solicitud || Fecha de la cita || Días de Anticipación
+  Table  42 (52 rows x 5 cols): N° || Fecha || Citas programadas(no canceladas) || Total de cuposdisponibles || Porcentaje deOcupación (%)
+  Table  43 (52 rows x 5 cols): N° || Fecha || Citas programadas (no canceladas) || Total de cupos disponibles || Porcentaje de ocupación (%)
+  Table  44 (52 rows x 5 cols): N° || Fecha || Citas estado'no asistió' || Citas confirmadastotales || Porcentaje deNo-Shows (%)
+  Table  45 (52 rows x 5 cols): N° || Fecha || Citas estado 'no asistió' || Citas confirmadas totales || Porcentaje de No-Shows (%)
+

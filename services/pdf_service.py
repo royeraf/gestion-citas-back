@@ -310,6 +310,175 @@ class PDFService:
         return buffer
     
     @staticmethod
+    def generar_pdf_reporte_estadisticas(
+        fecha_inicio: str,
+        fecha_fin: str,
+        area_nombre: str,
+        stats: dict,
+        citas_por_especialidad: list,
+        citas_detalle: list
+    ) -> BytesIO:
+        """
+        Genera un PDF con el reporte de estadísticas de citas.
+        """
+        buffer = BytesIO()
+
+        doc = SimpleDocTemplate(
+            buffer,
+            pagesize=A4,
+            rightMargin=1.5*cm,
+            leftMargin=1.5*cm,
+            topMargin=1.5*cm,
+            bottomMargin=1.5*cm
+        )
+
+        styles = getSampleStyleSheet()
+
+        title_style = ParagraphStyle(
+            'ReporteTitle', parent=styles['Heading1'],
+            fontSize=16, alignment=TA_CENTER,
+            spaceAfter=4*mm, textColor=colors.HexColor('#1a365d'),
+            fontName='Helvetica-Bold'
+        )
+        subtitle_style = ParagraphStyle(
+            'ReporteSubtitle', parent=styles['Heading2'],
+            fontSize=12, alignment=TA_CENTER,
+            spaceAfter=6*mm, textColor=colors.HexColor('#2d3748'),
+            fontName='Helvetica'
+        )
+        section_style = ParagraphStyle(
+            'ReporteSection', parent=styles['Heading3'],
+            fontSize=11, alignment=TA_LEFT,
+            spaceBefore=6*mm, spaceAfter=3*mm,
+            textColor=colors.HexColor('#2d3748'),
+            fontName='Helvetica-Bold'
+        )
+        info_style = ParagraphStyle(
+            'ReporteInfo', parent=styles['Normal'],
+            fontSize=9, alignment=TA_CENTER,
+            spaceAfter=6*mm, textColor=colors.HexColor('#4a5568')
+        )
+        footer_style = ParagraphStyle(
+            'ReporteFooter', parent=styles['Normal'],
+            fontSize=8, alignment=TA_CENTER,
+            textColor=colors.HexColor('#718096')
+        )
+
+        elements = []
+
+        # Encabezado
+        elements.append(Paragraph("CENTRO DE SALUD LA UNIÓN", title_style))
+        elements.append(Paragraph("Reporte de Estadísticas de Citas Médicas", subtitle_style))
+
+        # Período
+        try:
+            fi = datetime.strptime(fecha_inicio, "%Y-%m-%d").strftime("%d/%m/%Y")
+            ff = datetime.strptime(fecha_fin, "%Y-%m-%d").strftime("%d/%m/%Y")
+            period_text = f"<b>Período:</b> {fi} — {ff}"
+        except Exception:
+            period_text = f"<b>Período:</b> {fecha_inicio} — {fecha_fin}"
+
+        if area_nombre:
+            period_text += f"  |  <b>Especialidad:</b> {area_nombre}"
+
+        elements.append(Paragraph(period_text, info_style))
+
+        # Tabla de resumen KPI
+        elements.append(Paragraph("Resumen General", section_style))
+
+        kpi_data = [
+            ['Indicador', 'Valor'],
+            ['Total de Citas', str(stats.get('totalCitas', 0))],
+            ['Tasa de Asistencia', f"{stats.get('tasaAsistencia', 0)}%"],
+            ['Cancelaciones', str(stats.get('cancelaciones', 0))],
+        ]
+
+        kpi_table = Table(kpi_data, colWidths=[10*cm, 6*cm])
+        kpi_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#0d9488')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f0fdf4')]),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ]))
+        elements.append(kpi_table)
+
+        # Tabla de citas por especialidad
+        if citas_por_especialidad:
+            elements.append(Paragraph("Distribución por Especialidad", section_style))
+
+            esp_data = [['Especialidad', 'Cantidad', 'Porcentaje']]
+            for esp in citas_por_especialidad:
+                esp_data.append([
+                    esp.get('nombre', ''),
+                    str(esp.get('cantidad', 0)),
+                    f"{esp.get('porcentaje', 0)}%"
+                ])
+
+            esp_table = Table(esp_data, colWidths=[9*cm, 4*cm, 4*cm])
+            esp_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#7c3aed')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+                ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 9),
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#faf5ff')]),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+                ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ]))
+            elements.append(esp_table)
+
+        # Tabla de detalle de citas
+        if citas_detalle:
+            elements.append(Paragraph("Detalle de Citas", section_style))
+
+            det_data = [['Fecha', 'Paciente', 'Especialidad', 'Estado']]
+            for cita in citas_detalle:
+                det_data.append([
+                    cita.get('fecha', ''),
+                    cita.get('paciente', ''),
+                    cita.get('especialidad', ''),
+                    cita.get('estado', '').capitalize()
+                ])
+
+            det_table = Table(det_data, colWidths=[3*cm, 6*cm, 4.5*cm, 3.5*cm])
+            det_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#0369a1')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 9),
+                ('ALIGN', (0, 0), (0, -1), 'CENTER'),
+                ('ALIGN', (1, 0), (2, -1), 'LEFT'),
+                ('ALIGN', (3, 0), (3, -1), 'CENTER'),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f0f9ff')]),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ]))
+            elements.append(det_table)
+
+        # Footer
+        elements.append(Spacer(1, 8*mm))
+        fecha_generacion = datetime.now().strftime("%d/%m/%Y %H:%M")
+        elements.append(Paragraph(f"Documento generado el {fecha_generacion}", footer_style))
+
+        doc.build(elements)
+        buffer.seek(0)
+        return buffer
+
+    @staticmethod
     def generar_nombre_archivo(fecha: str, area_nombre: str, medico_nombre: str = None) -> str:
         """
         Genera un nombre de archivo descriptivo.
